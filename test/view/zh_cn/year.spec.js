@@ -1,4 +1,4 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, moment */
+/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon */
 
 /**
  * @license angularjs-bootstrap-datetimepicker
@@ -16,8 +16,8 @@ describe('current view displayed on the markup', function () {
 
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('zh-cn')
-    $rootScope.date = moment('2013-01-22T00:00:00.000').toDate()
+    luxon.Settings.defaultLocale = 'zh-cn'
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'year\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -33,7 +33,7 @@ describe('year view with ng-model = null', function () {
   var element
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('zh-cn')
+    luxon.Settings.defaultLocale = 'zh-cn'
     $rootScope.date = null
     element = $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ startView: \'year\' }"></datetimepicker>')($rootScope)
     $rootScope.$digest()
@@ -137,7 +137,7 @@ describe('year view with ng-model = null', function () {
     it('has one `.active` element with a value of 2010 when view is month and date is 2010', function () {
       expect(jQuery('.active', element).length).toBe(0)
 
-      rootScope.date = moment('2010-10-01').toDate()
+      rootScope.date = luxon.DateTime.fromISO('2010-10-01').toJSDate()
       rootScope.$apply()
 
       expect(jQuery('.active', element).length).toBe(1)
@@ -147,7 +147,7 @@ describe('year view with ng-model = null', function () {
 
   describe('where month view', function () {
     beforeEach(inject(function () {
-      rootScope.date = moment('2010-10-01').toDate()
+      rootScope.date = luxon.DateTime.fromISO('2010-10-01').toJSDate()
       rootScope.$digest()
       // Switch to month view...
       var pastElement = jQuery('.past', element)
@@ -191,7 +191,7 @@ describe('year view with ng-model = null', function () {
   })
   describe('where day view', function () {
     beforeEach(inject(function () {
-      rootScope.date = moment('2010-10-01').toDate()
+      rootScope.date = luxon.DateTime.fromISO('2010-10-01').toJSDate()
       rootScope.$digest()
       // Switch to day view...
       var pastElement = jQuery('.active', element)
@@ -242,7 +242,7 @@ describe('year view with ng-model = null', function () {
   })
   describe('where hour view', function () {
     beforeEach(inject(function () {
-      rootScope.date = moment('2010-10-01').toDate()
+      rootScope.date = luxon.DateTime.fromISO('2010-10-01').toJSDate()
       rootScope.$digest()
       // Switch to day view...
       var selectedElement = jQuery('.active', element)
@@ -296,7 +296,7 @@ describe('year view with with ng-model = null and minView="year"', function () {
     selectedElement.trigger('click')
 
     expect(jQuery('.active', element).text()).toBe('2020')
-    expect(rootScope.date).toEqual(moment('2020-01-01T00:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('2020-01-01T00:00:00.000').toJSDate())
   })
 })
 
@@ -306,7 +306,7 @@ describe('year view with with ng-model = 1970-1-1 (unix date of zero) and minVie
   var element
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    $rootScope.date = moment('1970-01-01T00:00:00.000').toDate()
+    $rootScope.date = luxon.DateTime.fromISO('1970-01-01T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'year\', minView: \'year\' }" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
     rootScope = $rootScope
@@ -318,6 +318,6 @@ describe('year view with with ng-model = 1970-1-1 (unix date of zero) and minVie
     selectedElement.trigger('click')
 
     expect(jQuery('.switch', element).text()).toBe('1960-1969')
-    expect(rootScope.date).toEqual(moment('1970-01-01T00:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('1970-01-01T00:00:00.000').toJSDate())
   })
 })

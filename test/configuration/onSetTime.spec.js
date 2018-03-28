@@ -1,4 +1,4 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, moment, spyOn */
+/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon, spyOn */
 
 /**
  * @license angularjs-bootstrap-datetimepicker
@@ -31,7 +31,7 @@ describe('onSetTime', function () {
   describe('calls onSetTime when date is selected', function () {
     it('onSetTime accepts date parameter', function () {
       $rootScope.setTimeFunction = function (selectedDate) {
-        expect(selectedDate).toEqual(moment('2009-01-01T00:00:00.000').toDate())
+        expect(selectedDate).toEqual(luxon.DateTime.fromISO('2009-01-01T00:00:00.000').toJSDate())
       }
 
       spyOn($rootScope, 'setTimeFunction').and.callThrough()
@@ -42,7 +42,7 @@ describe('onSetTime', function () {
       var selectedElement = jQuery('.past', element)
       selectedElement.trigger('click')
       expect($rootScope.setTimeFunction).toHaveBeenCalled()
-      expect($rootScope.date).toEqual(moment('2009-01-01T00:00:00.000').toDate())
+      expect($rootScope.date).toEqual(luxon.DateTime.fromISO('2009-01-01T00:00:00.000').toJSDate())
     })
   })
 
@@ -63,7 +63,7 @@ describe('onSetTime', function () {
       $rootScope.setTimeFunction = function (index, oldDate, newDate) {
         expect(oldDate).toBe(null)
         expect(oldDate).not.toEqual(newDate)
-        expect(newDate).toEqual(moment('2020-01-01T00:00:00.000').toDate())
+        expect(newDate).toEqual(luxon.DateTime.fromISO('2020-01-01T00:00:00.000').toJSDate())
         expect(index).toEqual(3)
       }
 

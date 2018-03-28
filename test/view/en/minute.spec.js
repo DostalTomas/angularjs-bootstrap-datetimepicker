@@ -1,4 +1,4 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, moment */
+/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon */
 
 /**
  * @license angularjs-bootstrap-datetimepicker
@@ -17,8 +17,8 @@ describe('current view displayed on the markup', function () {
 
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('en')
-    $rootScope.date = moment('2013-01-22T00:00:00.000').toDate()
+    luxon.Settings.defaultLocale = 'en'
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'minute\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -33,8 +33,8 @@ describe('minute view with initial date of 2013-01-22 0:00', function () {
   var element
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('en')
-    $rootScope.date = moment('2013-01-22T00:00:00.000').toDate()
+    luxon.Settings.defaultLocale = 'en'
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'minute\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -65,7 +65,7 @@ describe('minute view with initial date of 2013-01-22 1:15', function () {
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
     rootScope = $rootScope
-    $rootScope.date = moment('2013-01-22T01:15:00.000').toDate()
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T01:15:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'minute\', minuteStep: 15 }" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -85,7 +85,7 @@ describe('minute view with initial date of 2013-01-22 1:15', function () {
     selectedElement.trigger('click')
 
     expect(jQuery('.active', element).text()).toBe('1:00 AM')
-    expect(rootScope.date).toEqual(moment('2013-01-22T01:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('2013-01-22T01:00:00.000').toJSDate())
   })
 })
 
@@ -96,7 +96,7 @@ describe('view returns to startView after setting time', function () {
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
     rootScope = $rootScope
-    $rootScope.date = moment('2013-01-22T01:15:00.000').toDate()
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T01:15:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'hour\', minuteStep: 15 }" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -109,7 +109,7 @@ describe('view returns to startView after setting time', function () {
     jQuery(jQuery('.hour', element)[0]).trigger('click')
     jQuery(jQuery('.minute', element)[0]).trigger('click')
 
-    expect(rootScope.date).toEqual(moment('2013-01-22T00:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate())
 
     // View should have switched back to hour view at this point
     expect(jQuery('.active', element).text()).toBe('12:00 AM')

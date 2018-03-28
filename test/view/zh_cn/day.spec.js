@@ -1,4 +1,4 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, moment */
+/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon */
 
 /**
  * @license angularjs-bootstrap-datetimepicker
@@ -17,8 +17,8 @@ describe('current view displayed on the markup', function () {
 
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('zh-cn')
-    $rootScope.date = moment('2013-01-22T00:00:00.000').toDate()
+    luxon.Settings.defaultLocale = 'zh-cn'
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'day\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -33,8 +33,8 @@ describe('Chinese day view with initial date of 2013-01-22', function () {
   var element
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('zh-cn')
-    $rootScope.date = moment('2013-01-22T00:00:00.000').toDate()
+    luxon.Settings.defaultLocale = 'zh-cn'
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'day\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -68,7 +68,7 @@ describe('day with initial date of "2020-01-01T00:00:00.000" and minView="day"',
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
     rootScope = $rootScope
-    $rootScope.date = moment('2020-01-01T00:00:00.000').toDate()
+    $rootScope.date = luxon.DateTime.fromISO('2020-01-01T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'day\', minView: \'day\' }" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -82,7 +82,7 @@ describe('day with initial date of "2020-01-01T00:00:00.000" and minView="day"',
     selectedElement.trigger('click')
 
     expect(jQuery('.active', element).text()).toBe('12')
-    expect(rootScope.date).toEqual(moment('2020-01-12T00:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('2020-01-12T00:00:00.000').toJSDate())
   })
 })
 
@@ -93,7 +93,7 @@ describe('day with initial date of "2008-02-01T00:00:00.000" (leap year) and min
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
     rootScope = $rootScope
-    $rootScope.date = moment('2008-02-01T00:00:00.000').toDate()
+    $rootScope.date = luxon.DateTime.fromISO('2008-02-01T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'day\', minView: \'day\' }" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -110,6 +110,6 @@ describe('day with initial date of "2008-02-01T00:00:00.000" (leap year) and min
 
     selectedElement.trigger('click')
     expect(jQuery('.active', element).text()).toBe('29')
-    expect(rootScope.date).toEqual(moment('2008-02-29T00:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('2008-02-29T00:00:00.000').toJSDate())
   })
 })

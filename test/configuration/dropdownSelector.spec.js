@@ -1,4 +1,4 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, moment, spyOn */
+/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon, spyOn */
 
 /**
  * @license angularjs-bootstrap-datetimepicker
@@ -73,7 +73,7 @@ describe('dropdownSelector', function () {
       var pastElement = jQuery('.past', element)
       pastElement.trigger('click')
 
-      expect($rootScope.date).toEqual(moment('2009-01-01T00:00:00.000').toDate())
+      expect($rootScope.date).toEqual(luxon.DateTime.fromISO('2009-01-01T00:00:00.000').toJSDate())
       expect(dropDownSpy).toHaveBeenCalledWith('toggle')
     })
   })
@@ -108,7 +108,7 @@ describe('dropdownSelector', function () {
       var pastElement = jQuery('.past', element)
       pastElement.trigger('click')
 
-      expect($rootScope.date).toEqual(moment('2009-01-01T00:00:00.000').toDate())
+      expect($rootScope.date).toEqual(luxon.DateTime.fromISO('2009-01-01T00:00:00.000').toJSDate())
       expect(dropDownSpy).not.toHaveBeenCalled()
     })
   })

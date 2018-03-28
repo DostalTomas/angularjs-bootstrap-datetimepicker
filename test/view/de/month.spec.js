@@ -1,4 +1,4 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, moment */
+/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon */
 
 /**
  * @license angularjs-bootstrap-datetimepicker
@@ -16,8 +16,8 @@ describe('current view displayed on the markup', function () {
 
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('de')
-    $rootScope.date = moment('2013-01-22T00:00:00.000').toDate()
+    luxon.Settings.defaultLocale = 'de'
+    $rootScope.date = luxon.DateTime.fromISO('2013-01-22T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'month\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -32,8 +32,8 @@ describe('month view with initial date of 2010-10-01', function () {
   var element
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
-    moment.locale('de')
-    $rootScope.date = moment('2010-10-01').toDate()
+    luxon.Settings.defaultLocale = 'de'
+    $rootScope.date = luxon.DateTime.fromISO('2010-10-01').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'month\'}" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -61,7 +61,7 @@ describe('month view with initial date of "2020-01-01T00:00:00.000" and minView=
   beforeEach(module('ui.bootstrap.datetimepicker'))
   beforeEach(inject(function ($compile, $rootScope) {
     rootScope = $rootScope
-    $rootScope.date = moment('2020-01-01T00:00:00.000').toDate()
+    $rootScope.date = luxon.DateTime.fromISO('2020-01-01T00:00:00.000').toJSDate()
     element = $compile('<datetimepicker data-datetimepicker-config="{ startView: \'month\', minView: \'month\' }" data-ng-model="date"></datetimepicker>')($rootScope)
     $rootScope.$digest()
   }))
@@ -74,6 +74,6 @@ describe('month view with initial date of "2020-01-01T00:00:00.000" and minView=
     selectedElement.trigger('click')
 
     expect(jQuery('.active', element).text()).toBe('Dez.')
-    expect(rootScope.date).toEqual(moment('2020-12-01T00:00:00.000').toDate())
+    expect(rootScope.date).toEqual(luxon.DateTime.fromISO('2020-12-01T00:00:00.000').toJSDate())
   })
 })
