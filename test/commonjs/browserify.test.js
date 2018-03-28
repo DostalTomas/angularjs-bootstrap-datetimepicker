@@ -9,6 +9,8 @@
 
 var angular = require('angular')
 var tapeTest = require('tape')
+require('luxon/build/cjs-browser/luxon')
+
 
 tapeTest('can load module after requiring', function (t) {
   'use strict';

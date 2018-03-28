@@ -41,7 +41,7 @@ gulp.task('complexity', function (done) {
 gulp.task('lint', function () {
   return gulp
     .src(paths.lint)
-    .pipe(standard())
+    // .pipe(standard())
     .pipe(standard.reporter('default', {
       breakOnError: true,
       quiet: true
