@@ -1,4 +1,4 @@
-/*globals angular, moment, $ */
+/*globals angular, luxon, $ */
 (function () {
   'use strict';
 
@@ -32,7 +32,7 @@
     $scope.startDateBeforeRender = startDateBeforeRender
     $scope.startDateOnSetTime = startDateOnSetTime
 
-    moment.locale('en');
+    luxon.Settings.defaultLocale = 'en-us';
 
     $scope.config = {
       datetimePicker: {
@@ -79,11 +79,11 @@
     }
 
     function getLocale () {
-      return moment.locale();
+      return luxon.DateTime.utc().locale;
     }
 
     function setLocale (newLocale) {
-      moment.locale(newLocale);
+      luxon.Settings.defaultLocale = newLocale;
     }
 
     function guardianOnSetTime ($index, guardian, newDate, oldDate) {
@@ -135,7 +135,7 @@
 
     function startDateBeforeRender ($dates) {
       if ($scope.dateRangeEnd) {
-        var activeDate = moment($scope.dateRangeEnd);
+        var activeDate = luxon.DateTime.utc($scope.dateRangeEnd);
 
         $dates.filter(function (date) {
           return date.localDateValue() >= activeDate.valueOf()
@@ -147,7 +147,9 @@
 
     function endDateBeforeRender ($view, $dates) {
       if ($scope.dateRangeStart) {
-        var activeDate = moment($scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
+        var o = {};
+        o[$view] = 1;
+        var activeDate = luxon.DateTime.utc($scope.dateRangeStart).minus(o).plus({minutes: 1});
 
         $dates.filter(function (date) {
           return date.localDateValue() <= activeDate.valueOf()

@@ -2,8 +2,7 @@
 angular.module('demo',
   [
     'demo.demoController',
-    'ui.bootstrap.datetimepicker',
-    'ui.dateTimeInput'
+    'ui.bootstrap.datetimepicker'
   ])
   .config([
     function () {
