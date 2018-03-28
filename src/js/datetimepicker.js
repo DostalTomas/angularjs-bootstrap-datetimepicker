@@ -126,8 +126,8 @@
                 // View starts one year before the decade starts and ends one year after the decade ends
                 // i.e. passing in a date of 1/1/2013 will give a range of 2009 to 2020
                 // Truncate the last digit from the current year and subtract 1 to get the start of the decade
-                var startDecade = (parseInt(selectedDate.year / 10, 10) * 10);
-                var startDate = luxon.DateTime.local(startOfDecade(milliseconds)).minus({'years': 1}).startOf('year');
+                var startDecade = parseInt(selectedDate.year / 10, 10) * 10;
+                var startDate = startOfDecade(milliseconds).minus({'years': 1}).startOf('year');
 
                 var yearFormat = 'yyyy';
                 var activeFormat = formatValue(ngModelController.$modelValue, yearFormat);
@@ -140,13 +140,13 @@
                         utcDateValue: null,
                         display: startDecade + '-' + (startDecade + 9)
                     }),
-                    'leftDate': new DateObject({utcDateValue: luxon.DateTime.local(startDate).minus({'years': 9}).valueOf()}),
-                    'rightDate': new DateObject({utcDateValue: luxon.DateTime.local(startDate).plus({'years': 11}).valueOf()}),
+                    'leftDate': new DateObject({utcDateValue: startDate.minus({'years': 9}).valueOf()}),
+                    'rightDate': new DateObject({utcDateValue: startDate.plus({'years': 11}).valueOf()}),
                     'dates': []
                 };
 
                 for (var i = 0; i < 12; i += 1) {
-                    var yearMoment = luxon.DateTime.local(startDate).plus({'years': i});
+                    var yearMoment = startDate.plus({'years': i});
                     var dateValue = {
                         'active': yearMoment.toFormat(yearFormat) === activeFormat,
                         'current': yearMoment.toFormat(yearFormat) === currentFormat,
@@ -178,13 +178,13 @@
                         utcDateValue: previousViewDate.valueOf(),
                         display: startDate.toFormat('yyyy')
                     }),
-                    'leftDate': new DateObject({utcDateValue: luxon.DateTime.local(startDate).minus({'years': 1}).valueOf()}),
-                    'rightDate': new DateObject({utcDateValue: luxon.DateTime.local(startDate).plus({'years': 1}).valueOf()}),
+                    'leftDate': new DateObject({utcDateValue: startDate.minus({'years': 1}).valueOf()}),
+                    'rightDate': new DateObject({utcDateValue: startDate.plus({'years': 1}).valueOf()}),
                     'dates': []
                 };
 
                 for (var i = 0; i < 12; i += 1) {
-                    var monthMoment = luxon.DateTime.local(startDate).plus({'months': i});
+                    var monthMoment = startDate.plus({'months': i});
                     var dateValue = {
                         'active': monthMoment.toFormat(monthFormat) === activeFormat,
                         'current': monthMoment.toFormat(monthFormat) === currentFormat,
@@ -200,11 +200,11 @@
 
             function dayModelFactory(milliseconds) {
                 var selectedDate = luxon.DateTime.fromMillis(milliseconds);
-                var startOfMonth = luxon.DateTime.local(selectedDate).startOf('month');
-                var previousViewDate = luxon.DateTime.local(selectedDate).startOf('year');
-                var endOfMonth = luxon.DateTime.local(selectedDate).endOf('month');
+                var startOfMonth = selectedDate.startOf('month');
+                var previousViewDate = selectedDate.startOf('year');
+                var endOfMonth = selectedDate.endOf('month');
 
-                var startDate = luxon.DateTime.local(startOfMonth).minus({'days': Math.abs(startOfMonth.weekday)});
+                var startDate = startOfMonth.minus({'days': Math.abs(startOfMonth.weekday)});
 
                 var dayFormat = 'yyyy-LLL-dd';
                 var activeFormat = formatValue(ngModelController.$modelValue, dayFormat);
@@ -218,8 +218,8 @@
                         utcDateValue: previousViewDate.valueOf(),
                         display: startOfMonth.toFormat('yyyy-LLL')
                     }),
-                    'leftDate': new DateObject({utcDateValue: luxon.DateTime.local(startOfMonth).minus({'months': 1}).valueOf()}),
-                    'rightDate': new DateObject({utcDateValue: luxon.DateTime.local(startOfMonth).plus({'months': 1}).valueOf()}),
+                    'leftDate': new DateObject({utcDateValue: startOfMonth.minus({'months': 1}).valueOf()}),
+                    'rightDate': new DateObject({utcDateValue: startOfMonth.plus({'months': 1}).valueOf()}),
                     'dayNames': [],
                     'weeks': []
                 };
@@ -231,7 +231,7 @@
                 for (var i = 0; i < 6; i += 1) {
                     var week = {dates: []};
                     for (var j = 0; j < 7; j += 1) {
-                        var dayMoment = luxon.DateTime.local(startDate).plus({'days': (i * 7) + j});
+                        var dayMoment = startDate.plus({'days': (i * 7) + j});
                         var dateValue = {
                             'active': dayMoment.toFormat(dayFormat) === activeFormat,
                             'current': dayMoment.toFormat(dayFormat) === currentFormat,
@@ -250,7 +250,7 @@
 
             function hourModelFactory(milliseconds) {
                 var selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('day');
-                var previousViewDate = luxon.DateTime.local(selectedDate).startOf('month');
+                var previousViewDate = selectedDate.startOf('month');
 
                 var hourFormat = 'yyyy-LL-dd H';
                 var activeFormat = formatValue(ngModelController.$modelValue, hourFormat);
@@ -264,13 +264,13 @@
                         utcDateValue: previousViewDate.valueOf(),
                         display: selectedDate.toFormat('DD')
                     }),
-                    'leftDate': new DateObject({utcDateValue: luxon.DateTime.local(selectedDate).minus({'days': 1}).valueOf()}),
-                    'rightDate': new DateObject({utcDateValue: luxon.DateTime.local(selectedDate).plus({'days': 1}).valueOf()}),
+                    'leftDate': new DateObject({utcDateValue: selectedDate.minus({'days': 1}).valueOf()}),
+                    'rightDate': new DateObject({utcDateValue: selectedDate.plus({'days': 1}).valueOf()}),
                     'dates': []
                 };
 
                 for (var i = 0; i < 24; i += 1) {
-                    var hourMoment = luxon.DateTime.local(selectedDate).plus({'hours': i});
+                    var hourMoment = selectedDate.plus({'hours': i});
                     var dateValue = {
                         'active': hourMoment.toFormat(hourFormat) === activeFormat,
                         'current': hourMoment.toFormat(hourFormat) === currentFormat,
@@ -286,7 +286,7 @@
 
             function minuteModelFactory(milliseconds) {
                 var selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('hour');
-                var previousViewDate = luxon.DateTime.local(selectedDate).startOf('day');
+                var previousViewDate = selectedDate.startOf('day');
 
                 var minuteFormat = 'yyyy-LL-dd H:mm';
                 var activeFormat = formatValue(ngModelController.$modelValue, minuteFormat);
@@ -300,15 +300,15 @@
                         utcDateValue: previousViewDate.valueOf(),
                         display: selectedDate.toFormat('ff')
                     }),
-                    'leftDate': new DateObject({utcDateValue: luxon.DateTime.local(selectedDate).minus({'hours': 1}).valueOf()}),
-                    'rightDate': new DateObject({utcDateValue: luxon.DateTime.local(selectedDate).plus({'hours': 1}).valueOf()}),
+                    'leftDate': new DateObject({utcDateValue: selectedDate.minus({'hours': 1}).valueOf()}),
+                    'rightDate': new DateObject({utcDateValue: selectedDate.plus({'hours': 1}).valueOf()}),
                     'dates': []
                 };
 
                 var limit = 60 / configuration.minuteStep;
 
                 for (var i = 0; i < limit; i += 1) {
-                    var hourMoment = luxon.DateTime.local(selectedDate).plus({'minute': i * configuration.minuteStep});
+                    var hourMoment = selectedDate.plus({'minute': i * configuration.minuteStep});
                     var dateValue = {
                         'active': hourMoment.toFormat(minuteFormat) === activeFormat,
                         'current': hourMoment.toFormat(minuteFormat) === currentFormat,
@@ -337,7 +337,7 @@
                         newDate = milliseconds;
                         break;
                     default: // It is assumed that the modelType is a formatting string.
-                        newDate = luxon.DateTime.local([tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate(), tempDate.getUTCHours(), tempDate.getUTCMinutes(), tempDate.getUTCSeconds(), tempDate.getUTCMilliseconds()]).format(configuration.modelType)
+                        newDate = luxon.DateTime.local([tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate(), tempDate.getUTCHours(), tempDate.getUTCMinutes(), tempDate.getUTCSeconds(), tempDate.getUTCMilliseconds()]).toFormat(configuration.modelType)
                 }
 
                 var oldDate = ngModelController.$modelValue;
@@ -357,6 +357,10 @@
                 $scope.changeView(configuration.startView, new DateObject({utcDateValue: getUTCTime(ngModelController.$viewValue)}))
             }
 
+            /**
+             * @param {number} milliseconds
+             * @returns {DateTime}
+             */
             function startOfDecade(milliseconds) {
                 var startYear = (parseInt(luxon.DateTime.fromMillis(milliseconds).year / 10, 10) * 10);
                 return luxon.DateTime.fromMillis(milliseconds).set({year: startYear}).startOf('year')
