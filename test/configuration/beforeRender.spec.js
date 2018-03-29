@@ -16,7 +16,7 @@ describe('beforeRender', function () {
     beforeEach(inject(function (_$compile_, _$rootScope_) {
         // TODO
         // moment.tz.guess()
-        luxon.Settings.defaultLocale = 'en';
+        luxon.Settings.defaultLocale = 'en-GB';
         $compile = _$compile_;
         $rootScope = _$rootScope_
     }));
@@ -72,13 +72,14 @@ describe('beforeRender', function () {
         });
 
         it('in day view $dates parameter contains 42 members', function () {
-            $rootScope.date = luxon.DateTime.fromISO('2014-01-01T00:00:00.000').toJSDate();
+            $rootScope.date = luxon.DateTime.fromISO('2014-01-01T00:00:00.000Z').toJSDate();
+            console.warn(luxon.DateTime.fromISO('2014-01-01T00:00:00.000Z').valueOf());
 
             var offsetDate = new Date();
 
             $rootScope.beforeRender = function (dates) {
                 expect(dates.length).toBe(42);
-                expect(dates[0].utcDateValue).toBe(1388275200000);
+                expect(dates[0].utcDateValue).toBe(1388534400000);
                 offsetDate.setTime(dates[0].utcDateValue);
                 expect(dates[0].localDateValue()).toBe(1388275200000 + (offsetDate.getTimezoneOffset() * 60000));
                 expect(dates[11].utcDateValue).toBe(1389225600000);

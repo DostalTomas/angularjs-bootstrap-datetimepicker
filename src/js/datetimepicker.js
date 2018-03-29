@@ -14,8 +14,8 @@
     'use strict';
     /* istanbul ignore if */
     if (typeof module !== 'undefined' && module.exports) {
-        var ng = typeof angular === 'undefined' ? require('angular') : angular;
-        var mt = typeof luxon === 'undefined' ? require('luxon') : luxon;
+        const ng = typeof angular === 'undefined' ? require('angular') : angular;
+        const mt = typeof luxon === 'undefined' ? require('luxon') : luxon;
         factory(ng, mt);
         module.exports = 'ui.bootstrap.datetimepicker'
         /* istanbul ignore next */
@@ -34,7 +34,7 @@
     DatetimepickerDirective.$inject = ['dateTimePickerConfig', 'dateTimePickerValidator'];
 
     function DatetimepickerDirective(defaultConfig, configurationValidator) {
-        var directiveDefinition = {
+        const directiveDefinition = {
             bindToController: false,
             controller: DirectiveController,
             controllerAs: 'dateTimePickerController',
@@ -51,10 +51,13 @@
         DirectiveController.$inject = ['$scope', '$element', '$attrs'];
 
         function DirectiveController($scope, $element, $attrs) {
-            // Configuration
-            var ngModelController = $element.controller('ngModel');
+            luxon.Settings.defaultLocale = 'cs-CZ';
+            luxon.Settings.defaultLocale = 'en-US';
 
-            var configuration = createConfiguration();
+            // Configuration
+            const ngModelController = $element.controller('ngModel');
+
+            let configuration = createConfiguration();
             $scope.screenReader = configuration.screenReader;
 
             // Behavior
@@ -75,7 +78,7 @@
 
             // Implementation
 
-            var viewToModelFactory = {
+            const viewToModelFactory = {
                 year: yearModelFactory,
 
                 month: monthModelFactory,
@@ -96,14 +99,14 @@
                 }
 
                 if (viewName && (dateObject.utcDateValue > -Infinity) && dateObject.selectable && viewToModelFactory[viewName]) {
-                    var result = viewToModelFactory[viewName](dateObject.utcDateValue);
+                    const result = viewToModelFactory[viewName](dateObject.utcDateValue);
 
-                    var weekDates = [];
+                    const weekDates = [];
                     if (result.weeks) {
-                        for (var i = 0; i < result.weeks.length; i += 1) {
-                            var week = result.weeks[i];
-                            for (var j = 0; j < week.dates.length; j += 1) {
-                                var weekDate = week.dates[j];
+                        for (let i = 0; i < result.weeks.length; i += 1) {
+                            const week = result.weeks[i];
+                            for (let j = 0; j < week.dates.length; j += 1) {
+                                const weekDate = week.dates[j];
                                 weekDates.push(weekDate)
                             }
                         }
@@ -122,18 +125,18 @@
             }
 
             function yearModelFactory(milliseconds) {
-                var selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('year');
+                const selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('year');
                 // View starts one year before the decade starts and ends one year after the decade ends
                 // i.e. passing in a date of 1/1/2013 will give a range of 2009 to 2020
                 // Truncate the last digit from the current year and subtract 1 to get the start of the decade
-                var startDecade = parseInt(selectedDate.year / 10, 10) * 10;
-                var startDate = startOfDecade(milliseconds).minus({'years': 1}).startOf('year');
+                const startDecade = parseInt(selectedDate.year / 10, 10) * 10;
+                const startDate = startOfDecade(milliseconds).minus({'years': 1}).startOf('year');
 
-                var yearFormat = 'yyyy';
-                var activeFormat = formatValue(ngModelController.$modelValue, yearFormat);
-                var currentFormat = luxon.DateTime.local().toFormat(yearFormat);
+                const yearFormat = 'yyyy';
+                const activeFormat = formatValue(ngModelController.$modelValue, yearFormat);
+                const currentFormat = luxon.DateTime.utc().toFormat(yearFormat);
 
-                var result = {
+                const result = {
                     'currentView': 'year',
                     'nextView': configuration.minView === 'year' ? 'setTime' : 'month',
                     'previousViewDate': new DateObject({
@@ -145,9 +148,9 @@
                     'dates': []
                 };
 
-                for (var i = 0; i < 12; i += 1) {
-                    var yearMoment = startDate.plus({'years': i});
-                    var dateValue = {
+                for (let i = 0; i < 12; i += 1) {
+                    const yearMoment = startDate.plus({'years': i});
+                    const dateValue = {
                         'active': yearMoment.toFormat(yearFormat) === activeFormat,
                         'current': yearMoment.toFormat(yearFormat) === currentFormat,
                         'display': yearMoment.toFormat(yearFormat),
@@ -163,14 +166,14 @@
             }
 
             function monthModelFactory(milliseconds) {
-                var startDate = luxon.DateTime.fromMillis(milliseconds).startOf('year');
-                var previousViewDate = startOfDecade(milliseconds);
+                const startDate = luxon.DateTime.fromMillis(milliseconds).startOf('year');
+                const previousViewDate = startOfDecade(milliseconds);
 
-                var monthFormat = 'yyyy-LLL';
-                var activeFormat = formatValue(ngModelController.$modelValue, monthFormat);
-                var currentFormat = luxon.DateTime.local().toFormat(monthFormat);
+                const monthFormat = 'yyyy-LLL';
+                const activeFormat = formatValue(ngModelController.$modelValue, monthFormat);
+                const currentFormat = luxon.DateTime.local().toFormat(monthFormat);
 
-                var result = {
+                const result = {
                     'previousView': 'year',
                     'currentView': 'month',
                     'nextView': configuration.minView === 'month' ? 'setTime' : 'day',
@@ -183,9 +186,9 @@
                     'dates': []
                 };
 
-                for (var i = 0; i < 12; i += 1) {
-                    var monthMoment = startDate.plus({'months': i});
-                    var dateValue = {
+                for (let i = 0; i < 12; i += 1) {
+                    const monthMoment = startDate.plus({'months': i});
+                    const dateValue = {
                         'active': monthMoment.toFormat(monthFormat) === activeFormat,
                         'current': monthMoment.toFormat(monthFormat) === currentFormat,
                         'display': monthMoment.toFormat('LLL'),
@@ -199,18 +202,18 @@
             }
 
             function dayModelFactory(milliseconds) {
-                var selectedDate = luxon.DateTime.fromMillis(milliseconds);
-                var startOfMonth = selectedDate.startOf('month');
-                var previousViewDate = selectedDate.startOf('year');
-                var endOfMonth = selectedDate.endOf('month');
+                const selectedDate = luxon.DateTime.fromMillis(milliseconds);
+                const startOfMonth = selectedDate.startOf('month');
+                const previousViewDate = selectedDate.startOf('year');
+                const endOfMonth = selectedDate.endOf('month');
 
-                var startDate = startOfMonth.minus({'days': Math.abs(startOfMonth.weekday)});
+                const startDate = startOfMonth.minus({'days': Math.abs(startOfMonth.weekday)});
 
-                var dayFormat = 'yyyy-LLL-dd';
-                var activeFormat = formatValue(ngModelController.$modelValue, dayFormat);
-                var currentFormat = luxon.DateTime.local().toFormat(dayFormat);
+                const dayFormat = 'yyyy-LLL-dd';
+                const activeFormat = formatValue(ngModelController.$modelValue, dayFormat);
+                const currentFormat = luxon.DateTime.local().toFormat(dayFormat);
 
-                var result = {
+                const result = {
                     'previousView': 'month',
                     'currentView': 'day',
                     'nextView': configuration.minView === 'day' ? 'setTime' : 'hour',
@@ -224,15 +227,15 @@
                     'weeks': []
                 };
 
-                for (var dayNumber = 0; dayNumber < 7; dayNumber += 1) {
-                    result.dayNames.push(luxon.DateTime.local().set({weekday: dayNumber}).toFormat('dd'))
+                for (let dayNumber = 0; dayNumber < 7; dayNumber += 1) {
+                    result.dayNames.push(luxon.Info.weekdays('short')[dayNumber])
                 }
 
-                for (var i = 0; i < 6; i += 1) {
-                    var week = {dates: []};
-                    for (var j = 0; j < 7; j += 1) {
-                        var dayMoment = startDate.plus({'days': (i * 7) + j});
-                        var dateValue = {
+                for (let i = 0; i < 6; i += 1) {
+                    const week = {dates: []};
+                    for (let j = 0; j < 7; j += 1) {
+                        const dayMoment = startDate.plus({'days': (i * 7) + j});
+                        const dateValue = {
                             'active': dayMoment.toFormat(dayFormat) === activeFormat,
                             'current': dayMoment.toFormat(dayFormat) === currentFormat,
                             'display': dayMoment.toFormat('d'),
@@ -249,14 +252,14 @@
             }
 
             function hourModelFactory(milliseconds) {
-                var selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('day');
-                var previousViewDate = selectedDate.startOf('month');
+                const selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('day');
+                const previousViewDate = selectedDate.startOf('month');
 
-                var hourFormat = 'yyyy-LL-dd H';
-                var activeFormat = formatValue(ngModelController.$modelValue, hourFormat);
-                var currentFormat = luxon.DateTime.local().toFormat(hourFormat);
+                const hourFormat = 'yyyy-LL-dd H';
+                const activeFormat = formatValue(ngModelController.$modelValue, hourFormat);
+                const currentFormat = luxon.DateTime.local().toFormat(hourFormat);
 
-                var result = {
+                const result = {
                     'previousView': 'day',
                     'currentView': 'hour',
                     'nextView': configuration.minView === 'hour' ? 'setTime' : 'minute',
@@ -269,9 +272,9 @@
                     'dates': []
                 };
 
-                for (var i = 0; i < 24; i += 1) {
-                    var hourMoment = selectedDate.plus({'hours': i});
-                    var dateValue = {
+                for (let i = 0; i < 24; i += 1) {
+                    const hourMoment = selectedDate.plus({'hours': i});
+                    const dateValue = {
                         'active': hourMoment.toFormat(hourFormat) === activeFormat,
                         'current': hourMoment.toFormat(hourFormat) === currentFormat,
                         'display': hourMoment.toFormat('t'),
@@ -285,14 +288,14 @@
             }
 
             function minuteModelFactory(milliseconds) {
-                var selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('hour');
-                var previousViewDate = selectedDate.startOf('day');
+                const selectedDate = luxon.DateTime.fromMillis(milliseconds).startOf('hour');
+                const previousViewDate = selectedDate.startOf('day');
 
-                var minuteFormat = 'yyyy-LL-dd H:mm';
-                var activeFormat = formatValue(ngModelController.$modelValue, minuteFormat);
-                var currentFormat = luxon.DateTime.local().toFormat(minuteFormat);
+                const minuteFormat = 'yyyy-LL-dd H:mm';
+                const activeFormat = formatValue(ngModelController.$modelValue, minuteFormat);
+                const currentFormat = luxon.DateTime.local().toFormat(minuteFormat);
 
-                var result = {
+                const result = {
                     'previousView': 'hour',
                     'currentView': 'minute',
                     'nextView': 'setTime',
@@ -305,11 +308,11 @@
                     'dates': []
                 };
 
-                var limit = 60 / configuration.minuteStep;
+                const limit = 60 / configuration.minuteStep;
 
-                for (var i = 0; i < limit; i += 1) {
-                    var hourMoment = selectedDate.plus({'minute': i * configuration.minuteStep});
-                    var dateValue = {
+                for (let i = 0; i < limit; i += 1) {
+                    const hourMoment = selectedDate.plus({'minute': i * configuration.minuteStep});
+                    const dateValue = {
                         'active': hourMoment.toFormat(minuteFormat) === activeFormat,
                         'current': hourMoment.toFormat(minuteFormat) === currentFormat,
                         'display': hourMoment.toFormat('t'),
@@ -323,24 +326,22 @@
             }
 
             function setTime(milliseconds) {
-                var tempDate = new Date(milliseconds);
-                var newDate = new Date(tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate(), tempDate.getUTCHours(), tempDate.getUTCMinutes(), tempDate.getUTCSeconds(), tempDate.getUTCMilliseconds());
-
+                const lux = luxon.DateTime.fromMillis(milliseconds);
+                let newDate;
                 switch (configuration.modelType) {
                     case 'Date':
-                        // No additional work needed
+                        newDate = lux.toJSDate();
                         break;
                     case 'moment':
-                        newDate = luxon.DateTime.local([tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate(), tempDate.getUTCHours(), tempDate.getUTCMinutes(), tempDate.getUTCSeconds(), tempDate.getUTCMilliseconds()]);
                         break;
                     case 'milliseconds':
-                        newDate = milliseconds;
+                        newDate = lux.valueOf();
                         break;
                     default: // It is assumed that the modelType is a formatting string.
-                        newDate = luxon.DateTime.local([tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate(), tempDate.getUTCHours(), tempDate.getUTCMinutes(), tempDate.getUTCSeconds(), tempDate.getUTCMilliseconds()]).toFormat(configuration.modelType)
+                        newDate = lux.toFormat(configuration.modelType)
                 }
 
-                var oldDate = ngModelController.$modelValue;
+                const oldDate = ngModelController.$modelValue;
                 ngModelController.$setViewValue(newDate);
 
                 if (configuration.dropdownSelector) {
@@ -362,7 +363,7 @@
              * @returns {DateTime}
              */
             function startOfDecade(milliseconds) {
-                var startYear = (parseInt(luxon.DateTime.fromMillis(milliseconds).year / 10, 10) * 10);
+                const startYear = (parseInt(luxon.DateTime.fromMillis(milliseconds).year / 10, 10) * 10);
                 return luxon.DateTime.fromMillis(milliseconds).set({year: startYear}).startOf('year')
             }
 
@@ -390,7 +391,7 @@
                 } else if(typeof modelValue === 'object' && modelValue instanceof Date) {
                     return luxon.DateTime.fromJSDate(modelValue)
                 } else if(typeof modelValue === 'string') {
-                    var retVal = luxon.DateTime.fromFormat(modelValue, configuration.parseFormat);
+                    let retVal = luxon.DateTime.fromFormat(modelValue, configuration.parseFormat);
                     if(!retVal.isValid) {
                         retVal = luxon.DateTime.fromISO(modelValue);
                     }
@@ -413,26 +414,28 @@
              */
 
             function getUTCTime(modelValue) {
-                var tempDate = new Date();
+                let tempDate = luxon.DateTime.fromJSDate(new Date());
                 if (modelValue) {
-                    var tempMoment = getMoment(modelValue);
+                    const tempMoment = getMoment(modelValue);
                     if (tempMoment.isValid) {
-                        tempDate = tempMoment.toJSDate()
+                        tempDate = tempMoment;
                     } else {
                         throw new Error('Invalid date: ' + modelValue)
                     }
                 }
-                return tempDate.getTime() - (tempDate.getTimezoneOffset() * 60000)
+                const utc = tempDate.toUTC();
+                return utc.valueOf();
+                // podtud spravne
             }
 
             function createConfiguration() {
-                var directiveConfig = {};
+                let directiveConfig = {};
 
                 if ($attrs.datetimepickerConfig) {
                     directiveConfig = $scope.$parent.$eval($attrs.datetimepickerConfig)
                 }
 
-                var configuration = angular.extend({}, defaultConfig, directiveConfig);
+                const configuration = angular.extend({}, defaultConfig, directiveConfig);
 
                 configurationValidator.validate(configuration);
 
@@ -440,20 +443,17 @@
             }
         }
 
-        function DateObject() {
-            var tempDate = new Date(arguments[0].utcDateValue);
-            var localOffset = tempDate.getTimezoneOffset() * 60000;
-
-            this.utcDateValue = tempDate.getTime();
+        function DateObject(input) {
+            this.utcDateValue = input.utcDateValue;
             this.selectable = true;
 
             this.localDateValue = function localDateValue() {
-                return this.utcDateValue + localOffset
+                return luxon.DateTime.fromMillis(this.utcDateValue).toLocal().valueOf();
             };
 
-            var validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable', 'utcDateValue'];
+            const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable', 'utcDateValue'];
 
-            var constructorObject = arguments[0];
+            const constructorObject = input;
 
             Object.keys(constructorObject).filter(function (key) {
                 return validProperties.indexOf(key) >= 0
@@ -466,7 +466,7 @@
     }
 
     function DateTimePickerConfigProvider() {
-        var defaultConfiguration = {
+        const defaultConfiguration = {
             configureOn: null,
             dropdownSelector: null,
             minuteStep: 5,
@@ -477,7 +477,7 @@
             startView: 'day'
         };
 
-        var defaultLocalization = {
+        const defaultLocalization = {
             'bg': {previous: 'предишна', next: 'следваща'},
             'ca': {previous: 'anterior', next: 'següent'},
             'da': {previous: 'forrige', next: 'næste'},
@@ -507,7 +507,7 @@
             'zh-tw': {previous: '上一頁', next: '下一頁'}
         };
 
-        var screenReader = defaultLocalization[luxon.DateTime.local().locale.toLowerCase()];
+        const screenReader = defaultLocalization[luxon.DateTime.local().locale.toLowerCase()];
 
         return angular.extend({}, defaultConfiguration, {screenReader: screenReader})
     }
@@ -520,7 +520,7 @@
         };
 
         function validator(configuration) {
-            var validOptions = [
+            const validOptions = [
                 'configureOn',
                 'dropdownSelector',
                 'minuteStep',
@@ -532,7 +532,7 @@
                 'screenReader'
             ];
 
-            var invalidOptions = Object.keys(configuration).filter(function (key) {
+            const invalidOptions = Object.keys(configuration).filter(function (key) {
                 return (validOptions.indexOf(key) < 0)
             });
 
@@ -541,7 +541,7 @@
             }
 
             // Order of the elements in the validViews array is significant.
-            var validViews = ['minute', 'hour', 'day', 'month', 'year'];
+            const validViews = ['minute', 'hour', 'day', 'month', 'year'];
 
             if (validViews.indexOf(configuration.startView) < 0) {
                 throw new Error('invalid startView value: ' + configuration.startView)
