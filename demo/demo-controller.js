@@ -10,10 +10,10 @@
 
   function demoController ($scope, $log) {
 
-    var validViews = ['year', 'month', 'day', 'hour', 'minute'];
-    var selectable = true;
+      const validViews = ['year', 'month', 'day', 'hour', 'minute'];
+      let selectable = true;
 
-    $scope.controllerName = 'demoController';
+      $scope.controllerName = 'demoController';
 
     /* Bindable functions
      -----------------------------------------------*/
@@ -21,16 +21,16 @@
     $scope.changeConfig = changeConfig;
     $scope.checkboxOnTimeSet = checkboxOnTimeSet;
     $scope.configFunction = configFunction;
-    $scope.endDateBeforeRender = endDateBeforeRender
-    $scope.endDateOnSetTime = endDateOnSetTime
+    $scope.endDateBeforeRender = endDateBeforeRender;
+    $scope.endDateOnSetTime = endDateOnSetTime;
     $scope.getLocale = getLocale;
     $scope.guardianOnSetTime = guardianOnSetTime;
     $scope.inputOnTimeSet = inputOnTimeSet;
     $scope.renderOnBeforeRender = renderOnBeforeRender;
     $scope.renderOnClick = renderOnClick;
     $scope.setLocale = setLocale;
-    $scope.startDateBeforeRender = startDateBeforeRender
-    $scope.startDateOnSetTime = startDateOnSetTime
+    $scope.startDateBeforeRender = startDateBeforeRender;
+    $scope.startDateOnSetTime = startDateOnSetTime;
 
     luxon.Settings.defaultLocale = 'en-us';
 
@@ -79,7 +79,7 @@
     }
 
     function getLocale () {
-      return luxon.DateTime.utc().locale;
+      return luxon.Settings.defaultLocale;
     }
 
     function setLocale (newLocale) {
@@ -95,8 +95,8 @@
     }
 
     function beforeRender ($dates) {
-      var index = Math.ceil($dates.length / 2);
-      $log.info(index);
+        const index = Math.ceil($dates.length / 2);
+        $log.info(index);
       $dates[index].selectable = false;
     }
 
@@ -105,8 +105,8 @@
     }
 
     function changeConfig () {
-      var newIndex = validViews.indexOf($scope.config.configureOnConfig.startView) + 1;
-      console.log(newIndex);
+        let newIndex = validViews.indexOf($scope.config.configureOnConfig.startView) + 1;
+        console.log(newIndex);
       if (newIndex >= validViews.length) {
         newIndex = 0;
       }
@@ -135,9 +135,9 @@
 
     function startDateBeforeRender ($dates) {
       if ($scope.dateRangeEnd) {
-        var activeDate = luxon.DateTime.utc($scope.dateRangeEnd);
+          const activeDate = luxon.DateTime.utc($scope.dateRangeEnd);
 
-        $dates.filter(function (date) {
+          $dates.filter(function (date) {
           return date.localDateValue() >= activeDate.valueOf()
         }).forEach(function (date) {
           date.selectable = false;
@@ -147,11 +147,11 @@
 
     function endDateBeforeRender ($view, $dates) {
       if ($scope.dateRangeStart) {
-        var o = {};
-        o[$view] = 1;
-        var activeDate = luxon.DateTime.utc($scope.dateRangeStart).minus(o).plus({minutes: 1});
+          const o = {};
+          o[$view] = 1;
+          const activeDate = luxon.DateTime.utc($scope.dateRangeStart).minus(o).plus({minutes: 1});
 
-        $dates.filter(function (date) {
+          $dates.filter(function (date) {
           return date.localDateValue() <= activeDate.valueOf()
         }).forEach(function (date) {
           date.selectable = false;
