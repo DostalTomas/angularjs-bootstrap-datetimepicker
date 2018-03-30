@@ -1,5 +1,5 @@
 /*globals angular */
-luxon.Settings.defaultLocale = 'cs-CZ';
+//luxon.Settings.defaultLocale = 'cs-CZ';
 //luxon.Settings.defaultLocale = 'en-GB';
 
 angular.module('demo',

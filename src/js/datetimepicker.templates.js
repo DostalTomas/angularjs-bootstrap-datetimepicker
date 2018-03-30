@@ -30,20 +30,20 @@
 	<table class="table table-condensed {{ $ctrl.data.currentView }}-view">
 		<thead>
 			<tr>
-				<th class="left" data-ng-click="$ctrl.changeView($ctrl.data.currentView, $ctrl.data.leftDate, $event)"
-					data-ng-show="data.leftDate.selectable">
+				<th class="left" ng-click="$ctrl.changeView($ctrl.data.currentView, $ctrl.data.leftDate, $event)"
+					ng-show="data.leftDate.selectable">
 					<i class="glyphicon glyphicon-arrow-left">
 						<span class="sr-only">{{ $ctrl.screenReader.previous }}</span>
 					</i>
 				</th>
 
-				<th class="switch" colspan="5" data-ng-show="$ctrl.data.previousViewDate.selectable"
-					data-ng-click="$ctrl.changeView($ctrl.data.previousView, $ctrl.data.previousViewDate, $event)">
+				<th class="switch" colspan="5" ng-show="$ctrl.data.previousViewDate.selectable"
+					ng-click="$ctrl.changeView($ctrl.data.previousView, $ctrl.data.previousViewDate, $event)">
 					{{ $ctrl.data.previousViewDate.display }}
 				</th>
 
-				<th class="right" data-ng-click="$ctrl.changeView($ctrl.data.currentView, $ctrl.data.rightDate, $event)"
-					data-ng-show="$ctrl.data.rightDate.selectable">
+				<th class="right" ng-click="$ctrl.changeView($ctrl.data.currentView, $ctrl.data.rightDate, $event)"
+					ng-show="$ctrl.data.rightDate.selectable">
 					<i class="glyphicon glyphicon-arrow-right">
 						<span class="sr-only">{{ $ctrl.screenReader.next }}</span>
 					</i>
@@ -51,24 +51,24 @@
 			</tr>
 
 			<tr>
-				<th class="dow" data-ng-repeat="day in $ctrl.data.dayNames">{{ day }}</th>
+				<th class="dow" ng-repeat="day in $ctrl.data.dayNames">{{ day }}</th>
 			</tr>
 		</thead>
 
 		<tbody>
-			<tr data-ng-if="$ctrl.data.currentView !== 'day'">
+			<tr ng-if="$ctrl.data.currentView !== 'day'">
 				<td colspan="7">
-					<span class="{{ $ctrl.data.currentView }}" data-ng-repeat="dateObject in $ctrl.data.dates"
-						  data-ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}"
-						  data-ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)">{{ dateObject.display }}</span>
+					<span class="{{ $ctrl.data.currentView }}" ng-repeat="dateObject in $ctrl.data.dates"
+						  ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}"
+						  ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)">{{ dateObject.display }}</span>
 				</td>
 			</tr>
 
-			<tr data-ng-if="$ctrl.data.currentView === 'day'" data-ng-repeat="week in $ctrl.data.weeks">
-				<td data-ng-repeat="dateObject in week.dates"
-					data-ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)"
+			<tr ng-if="$ctrl.data.currentView === 'day'" ng-repeat="week in $ctrl.data.weeks">
+				<td ng-repeat="dateObject in week.dates"
+					ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)"
 					class="day"
-					data-ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}">
+					ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}">
 					{{ dateObject.display }}
 				</td>
 			</tr>

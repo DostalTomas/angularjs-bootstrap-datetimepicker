@@ -34,25 +34,30 @@
     const HOUR_FORMAT = 'yyyy-LL-dd H';
     const MINUTE_FORMAT = 'yyyy-LL-dd H:mm';
 
+    class DateObject {
 
-    angular.module('ui.bootstrap.datetimepicker', [])
-        .service('dateTimePickerConfig', DateTimePickerConfigProvider)
-        .service('dateTimePickerValidator', DateTimePickerValidatorService)
-        .directive('datetimepicker', DatetimepickerDirective);
+        /**
+         *
+         * @param {{dateTime: DateTime, active: boolean=, current: boolean=, future: boolean=, past: boolean=, display: string=, selectable: boolean=}}
+         */
+        constructor({dateTime, ...rest}) {
+            this.dateTime = dateTime;
+            this.selectable = true;
 
-    function DatetimepickerDirective() {
-        return {
-            bindToController: true,
-            controller: DirectiveController,
-            controllerAs: '$ctrl',
-            replace: true,
-            require: 'ngModel',
-            restrict: 'E',
-            scope: {
-                beforeRender: '&',
-                onSetTime: '&'
-            },
-            templateUrl: 'templates/datetimepicker.html'
+            const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable'];
+
+            Object.keys(rest)
+                .filter((key) => validProperties.includes(key))
+                .forEach((key) => {
+                    this[key] = rest[key]
+                });
+        }
+
+        /**
+         * @returns {DateTime}
+         */
+        localDateValue() {
+            return this.dateTime.toLocal();
         }
     }
 
@@ -60,11 +65,12 @@
         constructor($scope, $element, $attrs, configurationValidator, defaultConfig) {
             this.$scope = $scope;
             this.configurationValidator = configurationValidator;
+            this.defaultConfig = defaultConfig;
+            this.$attrs = $attrs;
+        }
 
-            // Configuration
-            this.ngModelController = $element.controller('ngModel');
-
-            this.configuration = this.createConfiguration($attrs, defaultConfig);
+        $onInit() {
+            this.configuration = this.createConfiguration(this.$attrs, this.defaultConfig);
             this.screenReader = this.configuration.screenReader;
 
             // Behavior
@@ -72,7 +78,7 @@
 
             if (this.configuration.configureOn) {
                 this.$scope.$on(this.configuration.configureOn, function () {
-                    this.configuration = this.createConfiguration($attrs, defaultConfig);
+                    this.configuration = this.createConfiguration(this.$attrs, this.defaultConfig);
                     this.screenReader = configuration.screenReader;
                     this.ngModelController.$render()
                 })
@@ -452,41 +458,12 @@
     }
     DirectiveController.$inject = ['$scope', '$element', '$attrs', 'dateTimePickerValidator', 'dateTimePickerConfig'];
 
-    class DateObject {
-
-        /**
-         *
-         * @param {{dateTime: DateTime, active: boolean=, current: boolean=, future: boolean=, past: boolean=, display: string=, selectable: boolean=}}
-         */
-        constructor({dateTime, ...rest}) {
-            this.dateTime = dateTime;
-            this.selectable = true;
-
-            const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable'];
-
-            Object.keys(rest)
-                .filter((key) => validProperties.includes(key))
-                .forEach((key) => {
-                    this[key] = rest[key]
-                });
-        }
-
-        /**
-         * @returns {DateTime}
-         */
-        localDateValue() {
-            return this.dateTime.toLocal();
-        }
-    }
-
-
-    function DateTimePickerConfigProvider() {
+    function DateTimePickerConfig() {
         const defaultConfiguration = {
             configureOn: null,
             dropdownSelector: null,
             minuteStep: 5,
             minView: 'minute',
-            parseFormat: 'YYYY-MM-DDTHH:mm:ss.SSSZZ',
             renderOn: null,
             startView: 'day'
         };
@@ -527,20 +504,18 @@
         return angular.extend({}, defaultConfiguration, {screenReader: screenReader})
     }
 
-    DateTimePickerValidatorService.$inject = ['$log'];
+    class DateTimePickerValidatorService {
 
-    function DateTimePickerValidatorService($log) {
-        return {
-            validate: validator
-        };
+        constructor($log) {
+            this.$log = $log;
+        }
 
-        function validator(configuration) {
+        validate(configuration) {
             const validOptions = [
                 'configureOn',
                 'dropdownSelector',
                 'minuteStep',
                 'minView',
-                'parseFormat',
                 'renderOn',
                 'startView',
                 'screenReader'
@@ -593,13 +568,31 @@
 
             /* istanbul ignore next */
             if (configuration.dropdownSelector !== null && ((typeof jQuery === 'undefined') || (typeof jQuery().dropdown !== 'function'))) {
-                $log.error('Please DO NOT specify the dropdownSelector option unless you are using jQuery AND Bootstrap.js. ' +
+                this.$log.error('Please DO NOT specify the dropdownSelector option unless you are using jQuery AND Bootstrap.js. ' +
                     'Please include jQuery AND Bootstrap.js, or write code to close the dropdown in the on-set-time callback. \n\n' +
                     'The dropdownSelector configuration option is being removed because it will not function properly.');
                 delete configuration.dropdownSelector
             }
         }
     }
+    DateTimePickerValidatorService.$inject = ['$log'];
+
+    angular.module('ui.bootstrap.datetimepicker', [])
+        .service('dateTimePickerConfig', DateTimePickerConfig)
+        .service('dateTimePickerValidator', DateTimePickerValidatorService)
+        .component('datetimepicker', {
+            templateUrl: 'templates/datetimepicker.html',
+            controller: DirectiveController,
+            controllerAs: '$ctrl',
+            require: {
+                ngModelController: 'ngModel'
+            },
+            bindings: {
+                beforeRender: '&',
+                onSetTime: '&'
+            }
+        });
+
 })); // eslint-disable-line semi
 
 /**
