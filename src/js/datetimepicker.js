@@ -42,9 +42,9 @@
 
     function DatetimepickerDirective() {
         return {
-            bindToController: false,
+            bindToController: true,
             controller: DirectiveController,
-            controllerAs: 'dateTimePickerController',
+            controllerAs: '$ctrl',
             replace: true,
             require: 'ngModel',
             restrict: 'E',
@@ -65,16 +65,15 @@
             this.ngModelController = $element.controller('ngModel');
 
             this.configuration = this.createConfiguration($attrs, defaultConfig);
-            this.$scope.screenReader = this.configuration.screenReader;
+            this.screenReader = this.configuration.screenReader;
 
             // Behavior
-            this.$scope.changeView = this.changeView.bind(this);
             this.ngModelController.$render = this.$render.bind(this);
 
             if (this.configuration.configureOn) {
-                this.$scope.$on(this.   configuration.configureOn, function () {
+                this.$scope.$on(this.configuration.configureOn, function () {
                     this.configuration = this.createConfiguration($attrs, defaultConfig);
-                    this.$scope.screenReader = configuration.screenReader;
+                    this.screenReader = configuration.screenReader;
                     this.ngModelController.$render()
                 })
             }
@@ -126,7 +125,7 @@
                     }
                 }
 
-                this.$scope.beforeRender({
+                this.beforeRender({
                     $view: result.currentView,
                     $dates: result.dates || weekDates,
                     $leftDate: result.leftDate,
@@ -134,7 +133,7 @@
                     $rightDate: result.rightDate
                 });
 
-                this.$scope.data = result
+                this.data = result
             }
         }
 
@@ -371,13 +370,13 @@
                 jQuery(this.configuration.dropdownSelector).dropdown('toggle')
             }
 
-            this.$scope.onSetTime({newDate: dateTime.toJSDate(), oldDate: oldDate});
+            this.onSetTime({newDate: dateTime.toJSDate(), oldDate: oldDate});
 
             return this.viewToModelFactory[this.configuration.startView](dateTime)
         }
 
         $render() {
-            this.$scope.changeView(this.configuration.startView, new DateObject({dateTime: this.toDateTime(this.ngModelController.$viewValue)}))
+            this.changeView(this.configuration.startView, new DateObject({dateTime: this.toDateTime(this.ngModelController.$viewValue)}))
         }
 
         /**
@@ -451,7 +450,6 @@
             return configuration
         }
     }
-
     DirectiveController.$inject = ['$scope', '$element', '$attrs', 'dateTimePickerValidator', 'dateTimePickerConfig'];
 
     class DateObject {
