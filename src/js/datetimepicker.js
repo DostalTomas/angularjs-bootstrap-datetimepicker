@@ -40,10 +40,8 @@
         .service('dateTimePickerValidator', DateTimePickerValidatorService)
         .directive('datetimepicker', DatetimepickerDirective);
 
-    DatetimepickerDirective.$inject = ['dateTimePickerConfig', 'dateTimePickerValidator'];
-
-    function DatetimepickerDirective(defaultConfig, configurationValidator) {
-        const directiveDefinition = {
+    function DatetimepickerDirective() {
+        return {
             bindToController: false,
             controller: DirectiveController,
             controllerAs: 'dateTimePickerController',
@@ -55,430 +53,434 @@
                 onSetTime: '&'
             },
             templateUrl: 'templates/datetimepicker.html'
-        };
+        }
+    }
 
-        DirectiveController.$inject = ['$scope', '$element', '$attrs'];
+    class DirectiveController {
+        constructor($scope, $element, $attrs, configurationValidator, defaultConfig) {
+            this.$scope = $scope;
+            this.configurationValidator = configurationValidator;
 
-        function DirectiveController($scope, $element, $attrs) {
             // Configuration
-            const ngModelController = $element.controller('ngModel');
+            this.ngModelController = $element.controller('ngModel');
 
-            let configuration = createConfiguration();
-            $scope.screenReader = configuration.screenReader;
+            this.configuration = this.createConfiguration($attrs, defaultConfig);
+            this.$scope.screenReader = this.configuration.screenReader;
 
             // Behavior
-            $scope.changeView = changeView;
-            ngModelController.$render = $render;
+            this.$scope.changeView = this.changeView.bind(this);
+            this.ngModelController.$render = this.$render.bind(this);
 
-            if (configuration.configureOn) {
-                $scope.$on(configuration.configureOn, function () {
-                    configuration = createConfiguration();
-                    $scope.screenReader = configuration.screenReader;
-                    ngModelController.$render()
+            if (this.configuration.configureOn) {
+                this.$scope.$on(this.   configuration.configureOn, function () {
+                    this.configuration = this.createConfiguration($attrs, defaultConfig);
+                    this.$scope.screenReader = configuration.screenReader;
+                    this.ngModelController.$render()
                 })
             }
 
-            if (configuration.renderOn) {
-                $scope.$on(configuration.renderOn, ngModelController.$render)
+            if (this.configuration.renderOn) {
+                this.$scope.$on(this.configuration.renderOn, this.ngModelController.$render)
             }
 
             // Implementation
 
-            const viewToModelFactory = {
-                year: yearModelFactory,
+            this.viewToModelFactory = {
+                year: this.yearModelFactory.bind(this),
 
-                month: monthModelFactory,
+                month: this.monthModelFactory.bind(this),
 
-                day: dayModelFactory,
+                day: this.dayModelFactory.bind(this),
 
-                hour: hourModelFactory,
+                hour: this.hourModelFactory.bind(this),
 
-                minute: minuteModelFactory,
+                minute: this.minuteModelFactory.bind(this),
 
-                setTime: setTime
+                setTime: this.setTime.bind(this)
             };
+        }
 
-            /**
-             *
-             * @param {string} viewName
-             * @param {DateObject} dateObject
-             * @param event
-             */
-            function changeView(viewName, dateObject, event) {
-                if (event) {
-                    event.stopPropagation();
-                    event.preventDefault()
-                }
+        /**
+         *
+         * @param {string} viewName
+         * @param {DateObject} dateObject
+         * @param event
+         */
+        changeView(viewName, dateObject, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault()
+            }
 
-                if (viewName && (dateObject.dateTime > -Infinity) && dateObject.selectable && viewToModelFactory[viewName]) {
-                    const result = viewToModelFactory[viewName](dateObject.dateTime);
+            if (viewName && (dateObject.dateTime > -Infinity) && dateObject.selectable && this.viewToModelFactory[viewName]) {
+                const result = this.viewToModelFactory[viewName](dateObject.dateTime);
 
-                    const weekDates = [];
-                    if (result.weeks) {
-                        for (let i = 0; i < result.weeks.length; i += 1) {
-                            const week = result.weeks[i];
-                            for (let j = 0; j < week.dates.length; j += 1) {
-                                const weekDate = week.dates[j];
-                                weekDates.push(weekDate)
-                            }
+                const weekDates = [];
+                if (result.weeks) {
+                    for (let i = 0; i < result.weeks.length; i += 1) {
+                        const week = result.weeks[i];
+                        for (let j = 0; j < week.dates.length; j += 1) {
+                            const weekDate = week.dates[j];
+                            weekDates.push(weekDate)
                         }
                     }
-
-                    $scope.beforeRender({
-                        $view: result.currentView,
-                        $dates: result.dates || weekDates,
-                        $leftDate: result.leftDate,
-                        $upDate: result.previousViewDate,
-                        $rightDate: result.rightDate
-                    });
-
-                    $scope.data = result
-                }
-            }
-
-            /**
-             * @param {DateTime} dateTime
-             * @returns {DateModel}
-             */
-            function yearModelFactory(dateTime) {
-                const selectedDate = dateTime.startOf('year');
-                // View starts one year before the decade starts and ends one year after the decade ends
-                // i.e. passing in a date of 1/1/2013 will give a range of 2009 to 2020
-                // Truncate the last digit from the current year and subtract 1 to get the start of the decade
-                const startDecade = parseInt(selectedDate.year / 10, 10) * 10;
-                const startDate = startOfDecade(dateTime).minus({'years': 1}).startOf('year');
-
-                const activeFormat = formatValue(toDateTime(ngModelController.$modelValue), YEAR_FORMAT);
-                const currentFormat = getCurrentTimeFormatted(YEAR_FORMAT);
-
-                const result = {
-                    currentView: 'year',
-                    nextView: configuration.minView === 'year' ? 'setTime' : 'month',
-                    previousViewDate: new DateObject({
-                        dateTime: null,
-                        display: startDecade + '-' + (startDecade + 9)
-                    }),
-                    leftDate: new DateObject({dateTime: startDate.minus({'years': 9})}),
-                    rightDate: new DateObject({dateTime: startDate.plus({'years': 11})}),
-                    dates: []
-                };
-
-                for (let i = 0; i < 12; i += 1) {
-                    const yearMoment = startDate.plus({'years': i});
-                    const dateValue = {
-                        active: yearMoment.toFormat(YEAR_FORMAT) === activeFormat,
-                        current: yearMoment.toFormat(YEAR_FORMAT) === currentFormat,
-                        display: yearMoment.toFormat(YEAR_FORMAT),
-                        future: yearMoment.year > startDecade + 9,
-                        past: yearMoment.year < startDecade,
-                        dateTime: yearMoment
-                    };
-
-                    result.dates.push(new DateObject(dateValue))
                 }
 
-                return result;
-            }
+                this.$scope.beforeRender({
+                    $view: result.currentView,
+                    $dates: result.dates || weekDates,
+                    $leftDate: result.leftDate,
+                    $upDate: result.previousViewDate,
+                    $rightDate: result.rightDate
+                });
 
-            /**
-             *
-             * @param {DateTime} dateTime
-             * @returns {DateModel}
-             */
-            function monthModelFactory(dateTime) {
-                const startDate = dateTime.startOf('year');
-                const previousViewDate = startOfDecade(dateTime);
-
-                const activeFormat = formatValue(toDateTime(ngModelController.$modelValue), MONTH_FORMAT);
-                const currentFormat = getCurrentTimeFormatted(MONTH_FORMAT);
-
-                const result = {
-                    previousView: 'year',
-                    currentView: 'month',
-                    nextView: configuration.minView === 'month' ? 'setTime' : 'day',
-                    previousViewDate: new DateObject({
-                        dateTime: previousViewDate,
-                        display: startDate.toFormat('yyyy')
-                    }),
-                    leftDate: new DateObject({dateTime: startDate.minus({'years': 1})}),
-                    rightDate: new DateObject({dateTime: startDate.plus({'years': 1})}),
-                    dates: []
-                };
-
-                for (let i = 0; i < 12; i += 1) {
-                    const monthMoment = startDate.plus({'months': i});
-                    const dateValue = {
-                        active: monthMoment.toFormat(MONTH_FORMAT) === activeFormat,
-                        current: monthMoment.toFormat(MONTH_FORMAT) === currentFormat,
-                        display: monthMoment.toFormat('LLL'),
-                        dateTime: monthMoment
-                    };
-
-                    result.dates.push(new DateObject(dateValue))
-                }
-
-                return result
-            }
-
-            /**
-             *
-             * @param {DateTime} dateTime
-             * @returns {DateModel}
-             */
-            function dayModelFactory(dateTime) {
-                const selectedDate = dateTime;
-                const previousViewDate = selectedDate.startOf('year');
-
-                const startOfMonth = selectedDate.startOf('month');
-                const endOfMonth = selectedDate.endOf('month');
-
-                const startDate = startOfMonth.minus({'days': Math.abs(startOfMonth.weekday)});
-
-                const activeFormat = formatValue(toDateTime(ngModelController.$modelValue), DAY_FORMAT);
-                const currentFormat = getCurrentTimeFormatted(DAY_FORMAT);
-
-                const result = {
-                    previousView: 'month',
-                    currentView: 'day',
-                    nextView: configuration.minView === 'day' ? 'setTime' : 'hour',
-                    previousViewDate: new DateObject({
-                        dateTime: previousViewDate,
-                        display: startOfMonth.toFormat('yyyy-LLL')
-                    }),
-                    leftDate: new DateObject({dateTime: startOfMonth.minus({'months': 1})}),
-                    rightDate: new DateObject({dateTime: startOfMonth.plus({'months': 1})}),
-                    dayNames: [],
-                    weeks: []
-                };
-
-                for (let dayNumber = 0; dayNumber < 7; dayNumber += 1) {
-                    result.dayNames.push(luxon.Info.weekdays('short')[dayNumber])
-                }
-
-                for (let i = 0; i < 6; i += 1) {
-                    const week = {dates: []};
-                    for (let j = 0; j < 7; j += 1) {
-                        const dayMoment = startDate.plus({'days': (i * 7) + j});
-                        const dateValue = {
-                            active: dayMoment.toFormat(DAY_FORMAT) === activeFormat,
-                            current: dayMoment.toFormat(DAY_FORMAT) === currentFormat,
-                            display: dayMoment.toFormat('d'),
-                            future: dayMoment > endOfMonth,
-                            past: dayMoment < startOfMonth,
-                            dateTime: dayMoment
-                        };
-                        week.dates.push(new DateObject(dateValue))
-                    }
-                    result.weeks.push(week)
-                }
-
-                return result;
-            }
-
-            /**
-             * @param {DateTime} dateTime
-             * @returns {DateModel}
-             */
-            function hourModelFactory(dateTime) {
-                const selectedDate = dateTime.startOf('day');
-                const previousViewDate = selectedDate.startOf('month');
-
-                const activeFormat = formatValue(toDateTime(ngModelController.$modelValue), HOUR_FORMAT);
-                const currentFormat = getCurrentTimeFormatted(HOUR_FORMAT);
-
-                const result = {
-                    previousView: 'day',
-                    currentView: 'hour',
-                    nextView: configuration.minView === 'hour' ? 'setTime' : 'minute',
-                    previousViewDate: new DateObject({
-                        dateTime: previousViewDate,
-                        display: selectedDate.toFormat('DD')
-                    }),
-                    leftDate: new DateObject({dateTime: selectedDate.minus({'days': 1})}),
-                    rightDate: new DateObject({dateTime: selectedDate.plus({'days': 1})}),
-                    dates: []
-                };
-
-                for (let i = 0; i < 24; i += 1) {
-                    const hourMoment = selectedDate.plus({'hours': i});
-                    const dateValue = {
-                        active: hourMoment.toFormat(HOUR_FORMAT) === activeFormat,
-                        current: hourMoment.toFormat(HOUR_FORMAT) === currentFormat,
-                        display: hourMoment.toFormat('t'),
-                        dateTime: hourMoment
-                    };
-
-                    result.dates.push(new DateObject(dateValue))
-                }
-
-                return result
-            }
-
-            /**
-             * @param {DateTime} dateTime
-             * @returns {DateModel}
-             */
-            function minuteModelFactory(dateTime) {
-                const selectedDate = dateTime.startOf('hour');
-                const previousViewDate = selectedDate.startOf('day');
-
-                const activeFormat = formatValue(toDateTime(ngModelController.$modelValue), MINUTE_FORMAT);
-                const currentFormat = getCurrentTimeFormatted(MINUTE_FORMAT);
-
-                const result = {
-                    previousView: 'hour',
-                    currentView: 'minute',
-                    nextView: 'setTime',
-                    previousViewDate: new DateObject({
-                        dateTime: previousViewDate,
-                        display: selectedDate.toFormat('ff')
-                    }),
-                    leftDate: new DateObject({dateTime: selectedDate.minus({'hours': 1})}),
-                    rightDate: new DateObject({dateTime: selectedDate.plus({'hours': 1})}),
-                    dates: []
-                };
-
-                const limit = 60 / configuration.minuteStep;
-
-                for (let i = 0; i < limit; i += 1) {
-                    const hourMoment = selectedDate.plus({'minute': i * configuration.minuteStep});
-                    const dateValue = {
-                        active: hourMoment.toFormat(MINUTE_FORMAT) === activeFormat,
-                        current: hourMoment.toFormat(MINUTE_FORMAT) === currentFormat,
-                        display: hourMoment.toFormat('t'),
-                        dateTime: hourMoment
-                    };
-
-                    result.dates.push(new DateObject(dateValue))
-                }
-
-                return result
-            }
-
-            /**
-             *
-             * @param {DateTime} dateTime
-             * @returns {*}
-             */
-            function setTime(dateTime) {
-                const oldDate = ngModelController.$modelValue;
-                ngModelController.$setViewValue(dateTime.toJSDate());
-
-                if (configuration.dropdownSelector) {
-                    // TODO remove this
-                    jQuery(configuration.dropdownSelector).dropdown('toggle')
-                }
-
-                $scope.onSetTime({newDate: dateTime.toJSDate(), oldDate: oldDate});
-
-                return viewToModelFactory[configuration.startView](dateTime)
-            }
-
-            function $render() {
-                $scope.changeView(configuration.startView, new DateObject({dateTime: toDateTime(ngModelController.$viewValue)}))
-            }
-
-            /**
-             * @param {DateTime} dateTime
-             * @returns {DateTime}
-             */
-            function startOfDecade(dateTime) {
-                const startYear = (parseInt(dateTime.year / 10, 10) * 10);
-                return dateTime.set({year: startYear}).startOf('year')
-            }
-
-            /**
-             *
-             * @param {DateTime=} dateTime
-             * @param {string} formatString
-             * @returns {string}
-             */
-            function formatValue(dateTime, formatString) {
-                if (dateTime) {
-                    return dateTime.toFormat(formatString)
-                } else {
-                    return ''
-                }
-            }
-
-            /**
-             *
-             * @param {string} format
-             * @returns {string}
-             */
-            function getCurrentTimeFormatted(format) {
-                return luxon.DateTime.fromJSDate(new Date()).toFormat(format);
-            }
-
-            /**
-             * Converts a time value into a moment.
-             *
-             * This function is now necessary because moment logs a warning when parsing a string without a format.
-             * @param {DateTime|Date} modelValue
-             *  a time value in any of the supported formats (Date, moment, milliseconds, and string)
-             * @returns {DateTime}
-             *  representing the specified time value.
-             */
-
-            function toDateTime(modelValue) {
-                if(modelValue) {
-
-                    if (modelValue instanceof Date) {
-                        return luxon.DateTime.fromJSDate(modelValue);
-                    } else if (modelValue instanceof luxon.DateTime) {
-                        return modelValue;
-                    }
-
-                    return luxon.DateTime.invalid('Invalid model value');
-                }
-
-                return luxon.DateTime.fromJSDate(new Date());
-            }
-
-            function createConfiguration() {
-                let directiveConfig = {};
-
-                if ($attrs.datetimepickerConfig) {
-                    directiveConfig = $scope.$parent.$eval($attrs.datetimepickerConfig)
-                }
-
-                const configuration = angular.extend({}, defaultConfig, directiveConfig);
-
-                configurationValidator.validate(configuration);
-
-                return configuration
+                this.$scope.data = result
             }
         }
 
-        class DateObject {
+        /**
+         * @param {DateTime} dateTime
+         * @returns {DateModel}
+         */
+        yearModelFactory(dateTime) {
+            const selectedDate = dateTime.startOf('year');
+            // View starts one year before the decade starts and ends one year after the decade ends
+            // i.e. passing in a date of 1/1/2013 will give a range of 2009 to 2020
+            // Truncate the last digit from the current year and subtract 1 to get the start of the decade
+            const startDecade = parseInt(selectedDate.year / 10, 10) * 10;
+            const startDate = this.startOfDecade(dateTime).minus({'years': 1}).startOf('year');
 
-            /**
-             *
-             * @param {{dateTime: DateTime, active: boolean=, current: boolean=, future: boolean=, past: boolean=, display: string=, selectable: boolean=}}
-             */
-            constructor({dateTime, ...rest}) {
-                this.dateTime = dateTime;
-                this.selectable = true;
+            const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), YEAR_FORMAT);
+            const currentFormat = this.getCurrentTimeFormatted(YEAR_FORMAT);
 
-                const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable'];
+            const result = {
+                currentView: 'year',
+                nextView: this.configuration.minView === 'year' ? 'setTime' : 'month',
+                previousViewDate: new DateObject({
+                    dateTime: null,
+                    display: startDecade + '-' + (startDecade + 9)
+                }),
+                leftDate: new DateObject({dateTime: startDate.minus({'years': 9})}),
+                rightDate: new DateObject({dateTime: startDate.plus({'years': 11})}),
+                dates: []
+            };
 
-                Object.keys(rest)
-                    .filter((key) => validProperties.includes(key))
-                    .forEach((key) => {
-                        this[key] = rest[key]
-                    });
+            for (let i = 0; i < 12; i += 1) {
+                const yearMoment = startDate.plus({'years': i});
+                const dateValue = {
+                    active: yearMoment.toFormat(YEAR_FORMAT) === activeFormat,
+                    current: yearMoment.toFormat(YEAR_FORMAT) === currentFormat,
+                    display: yearMoment.toFormat(YEAR_FORMAT),
+                    future: yearMoment.year > startDecade + 9,
+                    past: yearMoment.year < startDecade,
+                    dateTime: yearMoment
+                };
+
+                result.dates.push(new DateObject(dateValue))
             }
 
-            /**
-             * @returns {DateTime}
-             */
-            localDateValue() {
-                return this.dateTime.toLocal();
+            return result;
+        }
+
+        /**
+         *
+         * @param {DateTime} dateTime
+         * @returns {DateModel}
+         */
+        monthModelFactory(dateTime) {
+            const startDate = dateTime.startOf('year');
+            const previousViewDate = this.startOfDecade(dateTime);
+
+            const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), MONTH_FORMAT);
+            const currentFormat = this.getCurrentTimeFormatted(MONTH_FORMAT);
+
+            const result = {
+                previousView: 'year',
+                currentView: 'month',
+                nextView: this.configuration.minView === 'month' ? 'setTime' : 'day',
+                previousViewDate: new DateObject({
+                    dateTime: previousViewDate,
+                    display: startDate.toFormat('yyyy')
+                }),
+                leftDate: new DateObject({dateTime: startDate.minus({'years': 1})}),
+                rightDate: new DateObject({dateTime: startDate.plus({'years': 1})}),
+                dates: []
+            };
+
+            for (let i = 0; i < 12; i += 1) {
+                const monthMoment = startDate.plus({'months': i});
+                const dateValue = {
+                    active: monthMoment.toFormat(MONTH_FORMAT) === activeFormat,
+                    current: monthMoment.toFormat(MONTH_FORMAT) === currentFormat,
+                    display: monthMoment.toFormat('LLL'),
+                    dateTime: monthMoment
+                };
+
+                result.dates.push(new DateObject(dateValue))
+            }
+
+            return result
+        }
+
+        /**
+         *
+         * @param {DateTime} dateTime
+         * @returns {DateModel}
+         */
+        dayModelFactory(dateTime) {
+            const selectedDate = dateTime;
+            const previousViewDate = selectedDate.startOf('year');
+
+            const startOfMonth = selectedDate.startOf('month');
+            const endOfMonth = selectedDate.endOf('month');
+
+            const startDate = startOfMonth.minus({'days': Math.abs(startOfMonth.weekday)});
+
+            const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), DAY_FORMAT);
+            const currentFormat = this.getCurrentTimeFormatted(DAY_FORMAT);
+
+            const result = {
+                previousView: 'month',
+                currentView: 'day',
+                nextView: this.configuration.minView === 'day' ? 'setTime' : 'hour',
+                previousViewDate: new DateObject({
+                    dateTime: previousViewDate,
+                    display: startOfMonth.toFormat('yyyy-LLL')
+                }),
+                leftDate: new DateObject({dateTime: startOfMonth.minus({'months': 1})}),
+                rightDate: new DateObject({dateTime: startOfMonth.plus({'months': 1})}),
+                dayNames: [],
+                weeks: []
+            };
+
+            for (let dayNumber = 0; dayNumber < 7; dayNumber += 1) {
+                result.dayNames.push(luxon.Info.weekdays('short')[dayNumber])
+            }
+
+            for (let i = 0; i < 6; i += 1) {
+                const week = {dates: []};
+                for (let j = 0; j < 7; j += 1) {
+                    const dayMoment = startDate.plus({'days': (i * 7) + j});
+                    const dateValue = {
+                        active: dayMoment.toFormat(DAY_FORMAT) === activeFormat,
+                        current: dayMoment.toFormat(DAY_FORMAT) === currentFormat,
+                        display: dayMoment.toFormat('d'),
+                        future: dayMoment > endOfMonth,
+                        past: dayMoment < startOfMonth,
+                        dateTime: dayMoment
+                    };
+                    week.dates.push(new DateObject(dateValue))
+                }
+                result.weeks.push(week)
+            }
+
+            return result;
+        }
+
+        /**
+         * @param {DateTime} dateTime
+         * @returns {DateModel}
+         */
+        hourModelFactory(dateTime) {
+            const selectedDate = dateTime.startOf('day');
+            const previousViewDate = selectedDate.startOf('month');
+
+            const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), HOUR_FORMAT);
+            const currentFormat = this.getCurrentTimeFormatted(HOUR_FORMAT);
+
+            const result = {
+                previousView: 'day',
+                currentView: 'hour',
+                nextView: this.configuration.minView === 'hour' ? 'setTime' : 'minute',
+                previousViewDate: new DateObject({
+                    dateTime: previousViewDate,
+                    display: selectedDate.toFormat('DD')
+                }),
+                leftDate: new DateObject({dateTime: selectedDate.minus({'days': 1})}),
+                rightDate: new DateObject({dateTime: selectedDate.plus({'days': 1})}),
+                dates: []
+            };
+
+            for (let i = 0; i < 24; i += 1) {
+                const hourMoment = selectedDate.plus({'hours': i});
+                const dateValue = {
+                    active: hourMoment.toFormat(HOUR_FORMAT) === activeFormat,
+                    current: hourMoment.toFormat(HOUR_FORMAT) === currentFormat,
+                    display: hourMoment.toFormat('t'),
+                    dateTime: hourMoment
+                };
+
+                result.dates.push(new DateObject(dateValue))
+            }
+
+            return result
+        }
+
+        /**
+         * @param {DateTime} dateTime
+         * @returns {DateModel}
+         */
+        minuteModelFactory(dateTime) {
+            const selectedDate = dateTime.startOf('hour');
+            const previousViewDate = selectedDate.startOf('day');
+
+            const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), MINUTE_FORMAT);
+            const currentFormat = this.getCurrentTimeFormatted(MINUTE_FORMAT);
+
+            const result = {
+                previousView: 'hour',
+                currentView: 'minute',
+                nextView: 'setTime',
+                previousViewDate: new DateObject({
+                    dateTime: previousViewDate,
+                    display: selectedDate.toFormat('ff')
+                }),
+                leftDate: new DateObject({dateTime: selectedDate.minus({'hours': 1})}),
+                rightDate: new DateObject({dateTime: selectedDate.plus({'hours': 1})}),
+                dates: []
+            };
+
+            const limit = 60 / this.configuration.minuteStep;
+
+            for (let i = 0; i < limit; i += 1) {
+                const hourMoment = selectedDate.plus({'minute': i * this.configuration.minuteStep});
+                const dateValue = {
+                    active: hourMoment.toFormat(MINUTE_FORMAT) === activeFormat,
+                    current: hourMoment.toFormat(MINUTE_FORMAT) === currentFormat,
+                    display: hourMoment.toFormat('t'),
+                    dateTime: hourMoment
+                };
+
+                result.dates.push(new DateObject(dateValue))
+            }
+
+            return result
+        }
+
+        /**
+         *
+         * @param {DateTime} dateTime
+         * @returns {*}
+         */
+        setTime(dateTime) {
+            const oldDate = this.ngModelController.$modelValue;
+            this.ngModelController.$setViewValue(dateTime.toJSDate());
+
+            if (this.configuration.dropdownSelector) {
+                // TODO remove this
+                jQuery(this.configuration.dropdownSelector).dropdown('toggle')
+            }
+
+            this.$scope.onSetTime({newDate: dateTime.toJSDate(), oldDate: oldDate});
+
+            return this.viewToModelFactory[this.configuration.startView](dateTime)
+        }
+
+        $render() {
+            this.$scope.changeView(this.configuration.startView, new DateObject({dateTime: this.toDateTime(this.ngModelController.$viewValue)}))
+        }
+
+        /**
+         * @param {DateTime} dateTime
+         * @returns {DateTime}
+         */
+        startOfDecade(dateTime) {
+            const startYear = (parseInt(dateTime.year / 10, 10) * 10);
+            return dateTime.set({year: startYear}).startOf('year')
+        }
+
+        /**
+         *
+         * @param {DateTime=} dateTime
+         * @param {string} formatString
+         * @returns {string}
+         */
+        formatValue(dateTime, formatString) {
+            if (dateTime) {
+                return dateTime.toFormat(formatString)
+            } else {
+                return ''
             }
         }
 
-        return directiveDefinition
+        /**
+         *
+         * @param {string} format
+         * @returns {string}
+         */
+        getCurrentTimeFormatted(format) {
+            return luxon.DateTime.fromJSDate(new Date()).toFormat(format);
+        }
+
+        /**
+         * Converts a time value into a moment.
+         *
+         * This function is now necessary because moment logs a warning when parsing a string without a format.
+         * @param {DateTime|Date} modelValue
+         *  a time value in any of the supported formats (Date, moment, milliseconds, and string)
+         * @returns {DateTime}
+         *  representing the specified time value.
+         */
+
+        toDateTime(modelValue) {
+            if (modelValue) {
+
+                if (modelValue instanceof Date) {
+                    return luxon.DateTime.fromJSDate(modelValue);
+                } else if (modelValue instanceof luxon.DateTime) {
+                    return modelValue;
+                }
+
+                return luxon.DateTime.invalid('Invalid model value');
+            }
+
+            return luxon.DateTime.fromJSDate(new Date());
+        }
+
+        createConfiguration($attrs, defaultConfig) {
+            let directiveConfig = {};
+
+            if ($attrs.datetimepickerConfig) {
+                directiveConfig = this.$scope.$parent.$eval($attrs.datetimepickerConfig)
+            }
+
+            const configuration = angular.extend({}, defaultConfig, directiveConfig);
+
+            this.configurationValidator.validate(configuration);
+
+            return configuration
+        }
     }
+
+    DirectiveController.$inject = ['$scope', '$element', '$attrs', 'dateTimePickerValidator', 'dateTimePickerConfig'];
+
+    class DateObject {
+
+        /**
+         *
+         * @param {{dateTime: DateTime, active: boolean=, current: boolean=, future: boolean=, past: boolean=, display: string=, selectable: boolean=}}
+         */
+        constructor({dateTime, ...rest}) {
+            this.dateTime = dateTime;
+            this.selectable = true;
+
+            const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable'];
+
+            Object.keys(rest)
+                .filter((key) => validProperties.includes(key))
+                .forEach((key) => {
+                    this[key] = rest[key]
+                });
+        }
+
+        /**
+         * @returns {DateTime}
+         */
+        localDateValue() {
+            return this.dateTime.toLocal();
+        }
+    }
+
 
     function DateTimePickerConfigProvider() {
         const defaultConfiguration = {
