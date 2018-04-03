@@ -262,9 +262,9 @@
                 result.dayNames.push(luxon.Info.weekdays('short')[dayNumber])
             }
 
-            for (let i = 0; i < 6; i += 1) {
+            for (let i = 0; i < 6; i++) {
                 const week = {dates: []};
-                for (let j = 0; j < 7; j += 1) {
+                for (let j = 1; j < 8; j++) {
                     const dayMoment = startDate.plus({'days': (i * 7) + j});
                     const dateValue = {
                         active: dayMoment.toFormat(DAY_FORMAT) === activeFormat,

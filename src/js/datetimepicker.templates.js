@@ -31,7 +31,7 @@
 		<thead>
 			<tr>
 				<th class="left" ng-click="$ctrl.changeView($ctrl.data.currentView, $ctrl.data.leftDate, $event)"
-					ng-show="data.leftDate.selectable">
+					ng-show="$ctrl.data.leftDate.selectable">
 					<i class="glyphicon glyphicon-arrow-left">
 						<span class="sr-only">{{ $ctrl.screenReader.previous }}</span>
 					</i>
