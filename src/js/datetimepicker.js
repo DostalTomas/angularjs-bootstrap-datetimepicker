@@ -34,6 +34,37 @@
     const HOUR_FORMAT = 'yyyy-LL-dd H';
     const MINUTE_FORMAT = 'yyyy-LL-dd H:mm';
 
+    const DEFAULT_LOCALIZATION = {
+        'bg': {previous: 'предишна', next: 'следваща'},
+        'ca': {previous: 'anterior', next: 'següent'},
+        'da': {previous: 'forrige', next: 'næste'},
+        'de': {previous: 'vorige', next: 'weiter'},
+        'en-au': {previous: 'previous', next: 'next'},
+        'en-gb': {previous: 'previous', next: 'next'},
+        'en': {previous: 'previous', next: 'next'},
+        'es-us': {previous: 'atrás', next: 'siguiente'},
+        'es': {previous: 'atrás', next: 'siguiente'},
+        'fi': {previous: 'edellinen', next: 'seuraava'},
+        'fr': {previous: 'précédent', next: 'suivant'},
+        'hu': {previous: 'előző', next: 'következő'},
+        'it': {previous: 'precedente', next: 'successivo'},
+        'ja': {previous: '前へ', next: '次へ'},
+        'ml': {previous: 'മുൻപുള്ളത്', next: 'അടുത്തത്'},
+        'nl': {previous: 'vorige', next: 'volgende'},
+        'pl': {previous: 'poprzednia', next: 'następna'},
+        'pt-br': {previous: 'anteriores', next: 'próximos'},
+        'pt': {previous: 'anterior', next: 'próximo'},
+        'ro': {previous: 'anterior', next: 'următor'},
+        'ru': {previous: 'предыдущая', next: 'следующая'},
+        'sk': {previous: 'predošlá', next: 'ďalšia'},
+        'sv': {previous: 'föregående', next: 'nästa'},
+        'tr': {previous: 'önceki', next: 'sonraki'},
+        'uk': {previous: 'назад', next: 'далі'},
+        'zh-cn': {previous: '上一页', next: '下一页'},
+        'zh-tw': {previous: '上一頁', next: '下一頁'},
+        'cs-cz': {previous: 'Předchozí', next: 'Další'}
+    };
+
     class DateObject {
 
         /**
@@ -62,23 +93,23 @@
     }
 
     class DirectiveController {
-        constructor($scope, $element, $attrs, configurationValidator, defaultConfig) {
+        constructor($scope, $element, $attrs, dateTimePickerValidator, dateTimePickerConfig) {
             this.$scope = $scope;
-            this.configurationValidator = configurationValidator;
-            this.defaultConfig = defaultConfig;
+            this.dateTimePickerValidator = dateTimePickerValidator;
+            this.dateTimePickerConfig = dateTimePickerConfig;
             this.$attrs = $attrs;
         }
 
         $onInit() {
-            this.configuration = this.createConfiguration(this.$attrs, this.defaultConfig);
+            this.configuration = this.createConfiguration(this.$attrs, this.dateTimePickerConfig);
             this.screenReader = this.configuration.screenReader;
 
             // Behavior
             this.ngModelController.$render = this.$render.bind(this);
 
             if (this.configuration.configureOn) {
-                this.$scope.$on(this.configuration.configureOn, function () {
-                    this.configuration = this.createConfiguration(this.$attrs, this.defaultConfig);
+                this.$scope.$on(this.configuration.configureOn, () => {
+                    this.configuration = this.createConfiguration(this.$attrs, this.dateTimePickerConfig);
                     this.screenReader = configuration.screenReader;
                     this.ngModelController.$render()
                 })
@@ -451,14 +482,14 @@
 
             const configuration = angular.extend({}, defaultConfig, directiveConfig);
 
-            this.configurationValidator.validate(configuration);
+            this.dateTimePickerValidator.validate(configuration);
 
             return configuration
         }
     }
     DirectiveController.$inject = ['$scope', '$element', '$attrs', 'dateTimePickerValidator', 'dateTimePickerConfig'];
 
-    function DateTimePickerConfig() {
+    function DateTimePickerConfigFactory() {
         const defaultConfiguration = {
             configureOn: null,
             dropdownSelector: null,
@@ -468,38 +499,7 @@
             startView: 'day'
         };
 
-        const defaultLocalization = {
-            'bg': {previous: 'предишна', next: 'следваща'},
-            'ca': {previous: 'anterior', next: 'següent'},
-            'da': {previous: 'forrige', next: 'næste'},
-            'de': {previous: 'vorige', next: 'weiter'},
-            'en-au': {previous: 'previous', next: 'next'},
-            'en-gb': {previous: 'previous', next: 'next'},
-            'en': {previous: 'previous', next: 'next'},
-            'es-us': {previous: 'atrás', next: 'siguiente'},
-            'es': {previous: 'atrás', next: 'siguiente'},
-            'fi': {previous: 'edellinen', next: 'seuraava'},
-            'fr': {previous: 'précédent', next: 'suivant'},
-            'hu': {previous: 'előző', next: 'következő'},
-            'it': {previous: 'precedente', next: 'successivo'},
-            'ja': {previous: '前へ', next: '次へ'},
-            'ml': {previous: 'മുൻപുള്ളത്', next: 'അടുത്തത്'},
-            'nl': {previous: 'vorige', next: 'volgende'},
-            'pl': {previous: 'poprzednia', next: 'następna'},
-            'pt-br': {previous: 'anteriores', next: 'próximos'},
-            'pt': {previous: 'anterior', next: 'próximo'},
-            'ro': {previous: 'anterior', next: 'următor'},
-            'ru': {previous: 'предыдущая', next: 'следующая'},
-            'sk': {previous: 'predošlá', next: 'ďalšia'},
-            'sv': {previous: 'föregående', next: 'nästa'},
-            'tr': {previous: 'önceki', next: 'sonraki'},
-            'uk': {previous: 'назад', next: 'далі'},
-            'zh-cn': {previous: '上一页', next: '下一页'},
-            'zh-tw': {previous: '上一頁', next: '下一頁'},
-            'cs-cz': {previous: 'Předchozí', next: 'Další'}
-        };
-
-        const screenReader = defaultLocalization[luxon.Settings.defaultLocale.toLowerCase()];
+        const screenReader = DEFAULT_LOCALIZATION[luxon.Settings.defaultLocale.toLowerCase()];
 
         return angular.extend({}, defaultConfiguration, {screenReader: screenReader})
     }
@@ -521,9 +521,7 @@
                 'screenReader'
             ];
 
-            const invalidOptions = Object.keys(configuration).filter(function (key) {
-                return (validOptions.indexOf(key) < 0)
-            });
+            const invalidOptions = Object.keys(configuration).filter((key) => validOptions.indexOf(key) < 0);
 
             if (invalidOptions.length) {
                 throw new Error('Invalid options: ' + invalidOptions.join(', '))
@@ -578,7 +576,7 @@
     DateTimePickerValidatorService.$inject = ['$log'];
 
     angular.module('ui.bootstrap.datetimepicker', [])
-        .service('dateTimePickerConfig', DateTimePickerConfig)
+        .factory('dateTimePickerConfig', DateTimePickerConfigFactory)
         .service('dateTimePickerValidator', DateTimePickerValidatorService)
         .component('datetimepicker', {
             templateUrl: 'templates/datetimepicker.html',
