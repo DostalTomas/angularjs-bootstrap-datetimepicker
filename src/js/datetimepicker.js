@@ -92,6 +92,11 @@
         }
     }
 
+    /**
+     * @property ngModelController
+     * @property beforeRender
+     * @property onSetTime
+     */
     class DirectiveController {
         constructor($scope, $element, $attrs, dateTimePickerValidator, dateTimePickerConfig) {
             this.$scope = $scope;
@@ -110,7 +115,7 @@
             if (this.configuration.configureOn) {
                 this.$scope.$on(this.configuration.configureOn, () => {
                     this.configuration = this.createConfiguration(this.$attrs, this.dateTimePickerConfig);
-                    this.screenReader = configuration.screenReader;
+                    this.screenReader = this.configuration.screenReader;
                     this.ngModelController.$render()
                 })
             }
@@ -176,14 +181,14 @@
 
         /**
          * @param {DateTime} dateTime
-         * @returns {DateModel}
+         * @returns {{currentView: string, nextView: string, previousViewDate: DateObject, leftDate: DateObject, rightDate: DateObject, dates: Array}}
          */
         yearModelFactory(dateTime) {
             const selectedDate = dateTime.startOf('year');
             // View starts one year before the decade starts and ends one year after the decade ends
             // i.e. passing in a date of 1/1/2013 will give a range of 2009 to 2020
             // Truncate the last digit from the current year and subtract 1 to get the start of the decade
-            const startDecade = parseInt(selectedDate.year / 10, 10) * 10;
+            const startDecade = parseInt(selectedDate.year / 10 + '', 10) * 10;
             const startDate = this.startOfDecade(dateTime).minus({'years': 1}).startOf('year');
 
             const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), YEAR_FORMAT);
@@ -261,7 +266,7 @@
         /**
          *
          * @param {DateTime} dateTime
-         * @returns {DateModel}
+         * @returns {{previousView: string, currentView: string, nextView: string, previousViewDate: DateObject, leftDate: DateObject, rightDate: DateObject, dayNames: Array, weeks: Array}}
          */
         dayModelFactory(dateTime) {
             const selectedDate = dateTime;
@@ -400,7 +405,9 @@
          */
         setTime(dateTime) {
             const oldDate = this.ngModelController.$modelValue;
-            this.ngModelController.$setViewValue(dateTime.toJSDate());
+            if(dateTime.isValid) {
+                this.ngModelController.$setViewValue(dateTime.toJSDate());
+            }
 
             if (this.configuration.dropdownSelector) {
                 // TODO remove this
