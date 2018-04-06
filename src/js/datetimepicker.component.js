@@ -27,7 +27,7 @@ import {DAY_FORMAT, HOUR_FORMAT, MINUTE_FORMAT, MONTH_FORMAT, YEAR_FORMAT} from 
 class DirectiveController {
 
     /*@ngInject*/
-    constructor($scope, $element, $attrs, dateTimePickerValidator, dateTimePickerConfig) {
+    constructor($scope, $attrs, dateTimePickerValidator, dateTimePickerConfig) {
         this.$scope = $scope;
         this.dateTimePickerValidator = dateTimePickerValidator;
         this.dateTimePickerConfig = dateTimePickerConfig;
