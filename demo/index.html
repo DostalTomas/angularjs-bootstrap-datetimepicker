@@ -18,29 +18,32 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="src/css/datetimepicker.css">
+    <link rel="stylesheet" href="dist/datetimepicker.css">
+
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
     <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+    <script type="text/javascript" src="node_modules/angularjs-register/dist/register.js"></script>
     <script type="text/javascript" src="node_modules/luxon/build/global/luxon.js"></script>
+    <script type="text/javascript" src="dist/datetimepicker.js"></script>
+
     <script type="text/javascript" src="demo/demo-app.js"></script>
     <script type="text/javascript" src="demo/demo-controller.js"></script>
-    <script type="text/javascript" src="src/js/datetimepicker.js"></script>
-    <script type="text/javascript" src="src/js/datetimepicker.templates.js"></script>
     <style>
         .datetimepicker {
             width: 400px;
         }
     </style>
 </head>
-<body data-ng-app="demo">
-<div class="container" data-ng-controller="demoController">
+<body ng-app="demo">
+<div class="container" ng-controller="demoController">
 
 
     <ul class="nav nav-pills">
-        <li data-ng-class="{active: getLocale() === 'en'}"><a data-ng-click="setLocale('en')">English</a></li>
-        <li data-ng-class="{active: getLocale() === 'de'}"><a data-ng-click="setLocale('de')">German</a></li>
-        <li data-ng-class="{active: getLocale() === 'zh-cn'}"><a data-ng-click="setLocale('zh-cn')">Chinese</a></li>
+        <li ng-class="{active: getLocale() === 'en'}"><a ng-click="setLocale('en')">English</a></li>
+        <li ng-class="{active: getLocale() === 'de'}"><a ng-click="setLocale('de')">German</a></li>
+        <li ng-class="{active: getLocale() === 'zh-cn'}"><a ng-click="setLocale('zh-cn')">Chinese</a></li>
     </ul>
 
     <div class="row">
@@ -56,16 +59,16 @@
                 <p>Formatted Date: {{ data.dateDropDownInputNoFormatting | date:'medium' }}</p>
 
                 <div class="dropdown dropdown1-parent">
-                    <a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target=".dropdown1-parent"
+                    <a class="dropdown-toggle" id="dropdown1" role="button" toggle="dropdown" target=".dropdown1-parent"
                        href="#">
                         <div class="input-group">
-                            <input type="text" class="form-control" data-ng-model="data.dateDropDownInputNoFormatting">
+                            <input type="text" class="form-control" ng-model="data.dateDropDownInputNoFormatting">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.dateDropDownInputNoFormatting"
-                                        data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
+                        <datetimepicker ng-model="data.dateDropDownInputNoFormatting"
+                                        datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
                     </ul>
                 </div>
             </div>
@@ -85,17 +88,17 @@
                 <p>Formatted Date: {{ data.dateDropDownInput | date:'medium' }}</p>
 
                 <div class="dropdown dropdown2-parent">
-                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target=".dropdown2-parent"
+                    <a class="dropdown-toggle" id="dropdown2" role="button" toggle="dropdown" target=".dropdown2-parent"
                        href="#">
                         <div class="input-group">
-                            <input type="text" class="form-control" data-ng-model="data.dateDropDownInput"
-                                   data-date-time-input="YYYY-MM-DD HH:mm a">
+                            <input type="text" class="form-control" ng-model="data.dateDropDownInput"
+                                   date-time-input="YYYY-MM-DD HH:mm a">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.dateDropDownInput"
-                                        data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
+                        <datetimepicker ng-model="data.dateDropDownInput"
+                                        datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
                     </ul>
                 </div>
             </div>
@@ -108,22 +111,22 @@
 
             <p>Default configuration</p>
 
-            <p><code>data-on-set-time='inputOnTimeSet()'</code> to toggle the dropdown.</p>
+            <p><code>on-set-time='inputOnTimeSet()'</code> to toggle the dropdown.</p>
 
             <div class="well">
                 <p>Formatted Date: {{ data.inputOnTimeSet | date:'medium' }}</p>
 
                 <div class="dropdown dropdown3-parent">
-                    <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target=".dropdown3-parent"
+                    <a class="dropdown-toggle" id="dropdown3" role="button" toggle="dropdown" target=".dropdown3-parent"
                        href="#">
                         <div class="input-group">
-                            <input type="text" class="form-control" data-ng-model="data.inputOnTimeSet">
+                            <input type="text" class="form-control" ng-model="data.inputOnTimeSet">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.inputOnTimeSet"
-                                        data-on-set-time="inputOnTimeSet(newDate)"></datetimepicker>
+                        <datetimepicker ng-model="data.inputOnTimeSet"
+                                        on-set-time="inputOnTimeSet(newDate)"></datetimepicker>
                     </ul>
                 </div>
             </div>
@@ -143,33 +146,33 @@
 
                     <p>
                         <span class="label label-warning"
-                              data-ng-show="datePickerWithInputForm.formDateValue.$dirty">dirty</span>
+                              ng-show="datePickerWithInputForm.formDateValue.$dirty">dirty</span>
                         <span class="label label-info"
-                              data-ng-show="datePickerWithInputForm.formDateValue.$pristine">pristine</span>
+                              ng-show="datePickerWithInputForm.formDateValue.$pristine">pristine</span>
                         <span class="label label-success"
-                              data-ng-show="datePickerWithInputForm.formDateValue.$valid">valid</span>
+                              ng-show="datePickerWithInputForm.formDateValue.$valid">valid</span>
                         <span class="label label-danger"
-                              data-ng-show="datePickerWithInputForm.formDateValue.$invalid">invalid</span>
+                              ng-show="datePickerWithInputForm.formDateValue.$invalid">invalid</span>
                     </p>
 
                     <p>
-                        <button type="button" class="btn btn-default" data-ng-click="data.dateDropDownWithInput = null">
+                        <button type="button" class="btn btn-default" ng-click="data.dateDropDownWithInput = null">
                             Set to null
                         </button>
                     </p>
 
                     <div class="dropdown dropdown4-parent">
-                        <a class="dropdown-toggle" id="dropdown4" role="button" data-toggle="dropdown" data-target=".dropdown4-parent"
+                        <a class="dropdown-toggle" id="dropdown4" role="button" toggle="dropdown" target=".dropdown4-parent"
                            href="#">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="formDateValue" data-ng-required="true"
-                                       data-ng-model="data.dateDropDownWithInput">
+                                <input type="text" class="form-control" name="formDateValue" ng-required="true"
+                                       ng-model="data.dateDropDownWithInput">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             </div>
                         </a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <datetimepicker data-ng-model="data.dateDropDownWithInput"
-                                            data-datetimepicker-config="{ dropdownSelector: '#dropdown4' }"></datetimepicker>
+                            <datetimepicker ng-model="data.dateDropDownWithInput"
+                                            datetimepicker-config="{ dropdownSelector: '#dropdown4' }"></datetimepicker>
                         </ul>
                     </div>
                 </form>
@@ -188,13 +191,13 @@
                 <p>Formatted Date: {{ data.linkCalendar | date:'medium' }}</p>
 
                 <div class="dropdown dropdown5-parent">
-                    <a class="dropdown-toggle" id="dropdown5" role="button" data-toggle="dropdown" data-target=".dropdown5-parent"
+                    <a class="dropdown-toggle" id="dropdown5" role="button" toggle="dropdown" target=".dropdown5-parent"
                        href="#">
                         Click here to show calendar
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.linkCalendar"
-                                        data-datetimepicker-config="{ dropdownSelector: '#dropdown5' }"></datetimepicker>
+                        <datetimepicker ng-model="data.linkCalendar"
+                                        datetimepicker-config="{ dropdownSelector: '#dropdown5' }"></datetimepicker>
                     </ul>
                 </div>
             </div>
@@ -205,14 +208,14 @@
 
             <p><code>startView: 'day'</code> and <code>minuteStep: 15</code></p>
 
-            <p><code>data-on-set-time='checkboxOnTimeSet()'</code> to toggle visibility.</p>
+            <p><code>on-set-time='checkboxOnTimeSet()'</code> to toggle visibility.</p>
 
             <div class="well">
                 <p>Formatted Date: {{ data.checkboxCalendar | date:'medium' }}</p>
-                Click me to show/hide via ng-show: <input type="checkbox" data-ng-model="data.checked"><br/>
-                <datetimepicker data-ng-model="data.checkboxCalendar" data-ng-show="data.checked"
-                                data-datetimepicker-config="{ startView: 'day', minuteStep: 15 }"
-                                data-on-set-time="checkboxOnTimeSet(newDate)"></datetimepicker>
+                Click me to show/hide via ng-show: <input type="checkbox" ng-model="data.checked"><br/>
+                <datetimepicker ng-model="data.checkboxCalendar" ng-show="data.checked"
+                                datetimepicker-config="{ startView: 'day', minuteStep: 15 }"
+                                on-set-time="checkboxOnTimeSet(newDate)"></datetimepicker>
             </div>
         </div>
 
@@ -228,7 +231,7 @@
             <div class="well">
                 <p>Formatted Date: {{ data.embeddedYear | date:'yyyy-MM-dd h:mm a' }}</p>
 
-                <datetimepicker data-ng-model="data.embeddedYear"></datetimepicker>
+                <datetimepicker ng-model="data.embeddedYear"></datetimepicker>
             </div>
         </div>
 
@@ -244,18 +247,18 @@
 
                     <p>
                         <span class="label label-warning"
-                              data-ng-show="datePickerForm.formDateValue.$dirty">dirty</span>
+                              ng-show="datePickerForm.formDateValue.$dirty">dirty</span>
                         <span class="label label-info"
-                              data-ng-show="datePickerForm.formDateValue.$pristine">pristine</span>
+                              ng-show="datePickerForm.formDateValue.$pristine">pristine</span>
                         <span class="label label-success"
-                              data-ng-show="datePickerForm.formDateValue.$valid">valid</span>
+                              ng-show="datePickerForm.formDateValue.$valid">valid</span>
                         <span class="label label-danger"
-                              data-ng-show="datePickerForm.formDateValue.$invalid">invalid</span>
+                              ng-show="datePickerForm.formDateValue.$invalid">invalid</span>
                     </p>
 
-                    <button type="button" class="btn btn-default" data-ng-click="data.formDate = null">Set to null
+                    <button type="button" class="btn btn-default" ng-click="data.formDate = null">Set to null
                     </button>
-                    <datetimepicker data-ng-model="data.formDate" data-ng-required="true"
+                    <datetimepicker ng-model="data.formDate" ng-required="true"
                                     name="formDateValue"></datetimepicker>
                 </form>
             </div>
@@ -267,29 +270,29 @@
         <div class="col-sm-6">
             <h3>Embedded calendar with property configuration</h3>
 
-            <p><code>data-datetimepicker-config="config.datetimePicker"</code></p>
+            <p><code>datetimepicker-config="config.datetimePicker"</code></p>
 
             <p>which returns <code>{ startView: 'year' }</code></p>
 
             <div class="well">
                 <p>Formatted Date: {{ data.embeddedPropertyConfig | date:'yyyy-MM-dd h:mm a' }}</p>
 
-                <datetimepicker data-ng-model="data.embeddedPropertyConfig"
-                                data-datetimepicker-config="config.datetimePicker"></datetimepicker>
+                <datetimepicker ng-model="data.embeddedPropertyConfig"
+                                datetimepicker-config="config.datetimePicker"></datetimepicker>
             </div>
         </div>
         <div class="col-sm-6">
             <h3>Embedded calendar with function configuration</h3>
 
-            <p><code>data-datetimepicker-config="configFunction()"</code></p>
+            <p><code>datetimepicker-config="configFunction()"</code></p>
 
             <p>which returns <code>{ startView: 'month' }</code></p>
 
             <div class="well">
                 <p>Formatted Date: {{ data.embeddedFunctionConfig | date:'yyyy-MM-dd h:mm a' }}</p>
 
-                <datetimepicker data-ng-model="data.embeddedFunctionConfig"
-                                data-datetimepicker-config="configFunction()"></datetimepicker>
+                <datetimepicker ng-model="data.embeddedFunctionConfig"
+                                datetimepicker-config="configFunction()"></datetimepicker>
             </div>
         </div>
 
@@ -299,22 +302,22 @@
         <div class="col-sm-6">
             <h3>ng-repeat with drop-down using text link</h3>
 
-            <p><code>data-on-set-time="guardianOnSetTime($index, guardian, newDate, oldDate)"</code></p>
+            <p><code>on-set-time="guardianOnSetTime($index, guardian, newDate, oldDate)"</code></p>
 
-            <div class="well" data-ng-repeat="guardian in data.guardians">
+            <div class="well" ng-repeat="guardian in data.guardians">
                 <p>{{ guardian.name }}</p>
 
                 <p>DOB: {{ guardian.dob | date:'yyyy-MM-dd' }} </p>
 
                 <div class="dropdown dropdown-repeat-parent">
-                    <a class="dropdown-toggle" id="guardian{{ $index }}" role="button" data-toggle="dropdown"
-                       data-target=".dropdown-repeat-parent"
+                    <a class="dropdown-toggle" id="guardian{{ $index }}" role="button" toggle="dropdown"
+                       target=".dropdown-repeat-parent"
                        href="#">
                         Click here to show calendar
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="guardian.dob"
-                                        data-on-set-time="guardianOnSetTime($index, guardian, newDate, oldDate)"></datetimepicker>
+                        <datetimepicker ng-model="guardian.dob"
+                                        on-set-time="guardianOnSetTime($index, guardian, newDate, oldDate)"></datetimepicker>
                     </ul>
                 </div>
             </div>
@@ -330,17 +333,17 @@
                 <p>Formatted Date: {{ data.dateDropDownInputNoFormatting | date:'medium' }}</p>
 
                 <div class="dropdown dropdown6-parent">
-                    <a class="dropdown-toggle" id="dropdown6" role="button" data-toggle="dropdown" data-target=".dropdown6-parent"
+                    <a class="dropdown-toggle" id="dropdown6" role="button" toggle="dropdown" target=".dropdown6-parent"
                        href="#">
                         <div class="input-group">
-                            <input type="text" class="form-control" data-ng-model="data.dateDropDownInputNoFormatting">
+                            <input type="text" class="form-control" ng-model="data.dateDropDownInputNoFormatting">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.dateDropDownInputNoFormatting"
-                                        data-datetimepicker-config="{ dropdownSelector: '#dropdown6' }"
-                                        data-before-render="beforeRender($dates)"></datetimepicker>
+                        <datetimepicker ng-model="data.dateDropDownInputNoFormatting"
+                                        datetimepicker-config="{ dropdownSelector: '#dropdown6' }"
+                                        before-render="beforeRender($dates)"></datetimepicker>
                     </ul>
                 </div>
             </div>
@@ -355,14 +358,14 @@
             <p><code>configureOn: 'config-changed'</code> to cause the directive to re-read its configuration.</p>
 
             <p>
-                <button class="btn btn-default" data-ng-click="changeConfig()">Click me to change startView</button>
+                <button class="btn btn-default" ng-click="changeConfig()">Click me to change startView</button>
             </p>
 
             <div class="well">
                 <p>Start View: {{ config.configureOnConfig.startView }}</p>
 
-                <datetimepicker data-ng-model="data.configureOnDate"
-                                data-datetimepicker-config="config.configureOnConfig"></datetimepicker>
+                <datetimepicker ng-model="data.configureOnDate"
+                                datetimepicker-config="config.configureOnConfig"></datetimepicker>
 
             </div>
         </div>
@@ -374,14 +377,14 @@
             <p><code>renderOn: 'valid-dates-changed'</code> to cause the directive to re-render.</p>
 
             <p>
-                <button class="btn btn-default" data-ng-click="renderOnClick()">Click me to re-render</button>
+                <button class="btn btn-default" ng-click="renderOnClick()">Click me to re-render</button>
             </p>
 
             <div class="well">
 
-                <datetimepicker data-ng-model="data.renderOnDate"
-                                data-before-render='renderOnBeforeRender($dates)'
-                                data-datetimepicker-config="config.renderOnConfig"></datetimepicker>
+                <datetimepicker ng-model="data.renderOnDate"
+                                before-render='renderOnBeforeRender($dates)'
+                                datetimepicker-config="config.renderOnConfig"></datetimepicker>
 
             </div>
         </div>
@@ -395,13 +398,13 @@
 
             <p>This is a little more complex than the other examples.</p>
             <p><strong>Start Date:</strong> <code>renderOn: 'end-date-changed'</code> to cause the directive to re-render when the end date changes,
-            and <code>data-on-set-time="startDateOnSetTime()"</code> to broadcast when the start date changes,
-            and finally <code>data-before-render="beforeRenderStartDate($dates)"</code>
+            and <code>on-set-time="startDateOnSetTime()"</code> to broadcast when the start date changes,
+            and finally <code>before-render="beforeRenderStartDate($dates)"</code>
                 to disable the dates after the selected end date.</p>
 
             <p><strong>End Date:</strong> <code>renderOn: 'start-date-changed'</code> to cause the directive to re-render when the start date changes,
-                and <code>data-on-set-time="endDateOnSetTime()"</code> to broadcast when the end date changes,
-                and finally <code>data-before-render="beforeRenderEndDate($view, $dates, $leftDate, $upDate, $rightDate)"</code>
+                and <code>on-set-time="endDateOnSetTime()"</code> to broadcast when the end date changes,
+                and finally <code>before-render="beforeRenderEndDate($view, $dates, $leftDate, $upDate, $rightDate)"</code>
                 to disable the dates before the selected start date.</p>
 
             <p>NB: It is possible that data coming from the server (or via a defect in the controller) that the start date is after the end date.
@@ -411,35 +414,35 @@
             <div class="well">
                 <div class="dropdown form-group dropdown-start-parent">
                     <label>Start Date</label>
-                    <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown" data-target=".dropdown-start-parent"
+                    <a class="dropdown-toggle" id="dropdownStart" role="button" toggle="dropdown" target=".dropdown-start-parent"
                        href="#">
                         <div class="input-group date">
-                            <input type="text" class="form-control" data-ng-model="dateRangeStart">
+                            <input type="text" class="form-control" ng-model="dateRangeStart">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="dateRangeStart"
-                                        data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
-                                        data-on-set-time="startDateOnSetTime()"
-                                        data-before-render="startDateBeforeRender($dates)"></datetimepicker>
+                        <datetimepicker ng-model="dateRangeStart"
+                                        datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
+                                        on-set-time="startDateOnSetTime()"
+                                        before-render="startDateBeforeRender($dates)"></datetimepicker>
                     </ul>
                 </div>
 
                 <div class="dropdown form-group dropdown-end-parent">
                     <label>End Date</label>
-                    <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown" data-target=".dropdown-end-parent"
+                    <a class="dropdown-toggle" id="dropdownEnd" role="button" toggle="dropdown" target=".dropdown-end-parent"
                        href="#">
                         <div class="input-group date">
-                            <input type="text" class="form-control" data-ng-model="dateRangeEnd">
+                            <input type="text" class="form-control" ng-model="dateRangeEnd">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
                     </a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="dateRangeEnd"
-                                        data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
-                                        data-on-set-time="endDateOnSetTime()"
-                                        data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
+                        <datetimepicker ng-model="dateRangeEnd"
+                                        datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
+                                        on-set-time="endDateOnSetTime()"
+                                        before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
                     </ul>
                 </div>
             </div>

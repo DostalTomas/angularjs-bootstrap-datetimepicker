@@ -4,7 +4,7 @@ const ExtractTextPlugin =  require('extract-text-webpack-plugin');
 const  CleanWebpackPlugin =  require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
 
     entry: {
         datetimepicker: ['./src/js/datetimepicker.module.js']
@@ -30,8 +30,30 @@ module.exports = {
 
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                use: 'babel-loader'
+                include: /(angularjs-bootstrap-datetimepicker\/src)|(angularjs-register)/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        'plugins': [
+                            '@babel/plugin-proposal-class-properties',
+                            '@babel/plugin-proposal-object-rest-spread',
+                            'angularjs-annotate'
+                        ],
+                        'presets': [
+                            [
+                                'env',
+                                {
+                                    'targets': {
+                                        'browsers': [
+                                            'last 2 versions',
+                                            'IE 11'
+                                        ]
+                                    }
+                                }
+                            ]
+                        ]
+                    }
+                }]
             },
             {
                 test: /\.scss$/,
