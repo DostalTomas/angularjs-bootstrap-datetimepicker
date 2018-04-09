@@ -1,4 +1,4 @@
-datetimepicker.table-responsive
+.datetimepicker.table-responsive
 	table.table.table-condensed(class="{{ $ctrl.data.currentView }}-view")
 		thead
 			tr
@@ -19,8 +19,8 @@ datetimepicker.table-responsive
 		tbody
 			tr(ng-if="$ctrl.data.currentView !== 'day'")
 				td(colspan="7")
-					span(class="{{ $ctrl.data.currentView }}" ng-repeat="dateObject in $ctrl.data.dates" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)")
-					| {{ dateObject.display }}
+					span(class="{{ $ctrl.data.currentView }}" ng-repeat="dateObject in $ctrl.data.dates" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)").
+						{{ dateObject.display }}
 
 			tr(ng-if="$ctrl.data.currentView === 'day'" ng-repeat="week in $ctrl.data.weeks")
 				td.day(ng-repeat="dateObject in week.dates" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}")

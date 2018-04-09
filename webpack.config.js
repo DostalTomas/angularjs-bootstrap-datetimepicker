@@ -15,18 +15,18 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
 
-        library: 'datetimepicker',
+        library: 'angularjs-bootstrap-datetimepicker',
         libraryTarget: 'umd'
     },
 
     module: {
         rules: [
-            {
+            /*{
                 enforce: 'pre',
                 test: /\.js$/,
                 exclude: [/node_modules/],
                 loader: 'eslint-loader'
-            },
+            },*/
 
             {
                 test: /\.js$/,
