@@ -345,8 +345,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /**
  * @property ngModelController
- * @property beforeRender
- * @property onSetTime
+ * @property {function} beforeRender
+ * @property {function} onSetTime
+ * @property {string} viewFormat
  */
 var DirectiveController =
 /*#__PURE__*/
@@ -715,7 +716,13 @@ function () {
     key: "setTime",
     value: function setTime(dateTime) {
       var oldDate = this.ngModelController.$modelValue;
-      this.ngModelController.$setViewValue(dateTime.toISO());
+
+      if (this.viewFormat) {
+        this.ngModelController.$setViewValue(dateTime.toFormat(this.viewFormat));
+      } else {
+        this.ngModelController.$setViewValue(dateTime.toISO());
+      }
+
       this.onSetTime({
         newDate: dateTime.toJSDate(),
         oldDate: oldDate
@@ -810,6 +817,20 @@ function () {
 
   return DirectiveController;
 }();
+/**
+ * @ngdoc component
+ * @name datetimepicker
+ * @module ui.bootstrap.datetimepicker
+ *
+ * @param {expression} beforeRender
+ * @param {expression} onSetTime
+ * @param {string} viewFormat
+ *
+ * @description
+ * Date and time picker component
+ * blah blah blah... TODO...
+ */
+
 
 var DateTimePickerComponent = function DateTimePickerComponent() {
   _classCallCheck(this, DateTimePickerComponent);
@@ -846,7 +867,8 @@ var DateTimePickerComponent = function DateTimePickerComponent() {
     writable: true,
     value: {
       beforeRender: '&',
-      onSetTime: '&'
+      onSetTime: '&',
+      viewFormat: '@?'
     }
   });
 };

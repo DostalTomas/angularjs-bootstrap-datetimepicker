@@ -21,8 +21,9 @@ import {DAY_FORMAT, HOUR_FORMAT, MINUTE_FORMAT, MONTH_FORMAT, YEAR_FORMAT} from 
 
 /**
  * @property ngModelController
- * @property beforeRender
- * @property onSetTime
+ * @property {function} beforeRender
+ * @property {function} onSetTime
+ * @property {string} viewFormat
  */
 class DirectiveController {
 
@@ -333,7 +334,11 @@ class DirectiveController {
      */
     setTime(dateTime) {
         const oldDate = this.ngModelController.$modelValue;
-        this.ngModelController.$setViewValue(dateTime.toISO());
+        if (this.viewFormat) {
+            this.ngModelController.$setViewValue(dateTime.toFormat(this.viewFormat));
+        } else {
+            this.ngModelController.$setViewValue(dateTime.toISO());
+        }
 
         this.onSetTime({newDate: dateTime.toJSDate(), oldDate});
 
@@ -413,7 +418,19 @@ class DirectiveController {
     }
 }
 
-
+/**
+ * @ngdoc component
+ * @name datetimepicker
+ * @module ui.bootstrap.datetimepicker
+ *
+ * @param {expression} beforeRender
+ * @param {expression} onSetTime
+ * @param {string} viewFormat
+ *
+ * @description
+ * Date and time picker component
+ * blah blah blah... TODO...
+ */
 export default class DateTimePickerComponent {
     static componentName = 'datetimepicker';
 
@@ -427,6 +444,7 @@ export default class DateTimePickerComponent {
 
     bindings = {
         beforeRender: '&',
-        onSetTime: '&'
+        onSetTime: '&',
+        viewFormat: '@?'
     }
 }

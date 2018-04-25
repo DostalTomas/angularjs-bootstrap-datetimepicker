@@ -448,6 +448,23 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <h3>Restriction Demo</h3>
+        <div class="col-sm-6">
+            <div class="form">
+                <div class="form-group">
+                    <label>From</label>
+                    <input type="date" class="form-control" ng-model="dateFrom">
+                </div>
+                <div class="form-group">
+                    <label>To</label>
+                    <input type="date" class="form-control" ng-model="dateTo">
+                </div>
+            </div>
+            <datetimepicker ng-model="restrictedDate" before-render="restrictDates(dateFrom, dateTo, $dates, $view)"></datetimepicker>
+        </div>
+    </div>
 </div>
 
 </body>
