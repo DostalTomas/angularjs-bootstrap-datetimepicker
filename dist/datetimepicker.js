@@ -367,16 +367,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var DirectiveController =
 /*#__PURE__*/
 function () {
-  DirectiveController.$inject = ["$scope", "$attrs", "dateTimePickerValidator", "dateTimePickerConfig"];
+  DirectiveController.$inject = ["$scope", "$attrs", "dateTimePickerValidator", "dateTimePickerConfig", "$element"];
 
   /*@ngInject*/
-  function DirectiveController($scope, $attrs, dateTimePickerValidator, dateTimePickerConfig) {
+  function DirectiveController($scope, $attrs, dateTimePickerValidator, dateTimePickerConfig, $element) {
     _classCallCheck(this, DirectiveController);
 
     this.$scope = $scope;
     this.dateTimePickerValidator = dateTimePickerValidator;
     this.dateTimePickerConfig = dateTimePickerConfig;
     this.$attrs = $attrs;
+    this.$element = $element;
   }
 
   _createClass(DirectiveController, [{
@@ -742,6 +743,11 @@ function () {
         newDate: dateTime.toJSDate(),
         oldDate: oldDate
       });
+
+      if (this.$attrs.ngChange) {
+        this.$scope.$eval(this.$attrs.ngChange);
+      }
+
       return this.viewToModelFactory[this.configuration.startView](dateTime);
     }
   }, {

@@ -1,5 +1,5 @@
 import angular from 'angular';
-import {Info, DateTime} from 'luxon';
+import {DateTime, Info} from 'luxon';
 
 import template from '../templates/datetimepicker.tpl.pug';
 
@@ -28,11 +28,12 @@ import {DAY_FORMAT, HOUR_FORMAT, MINUTE_FORMAT, MONTH_FORMAT, YEAR_FORMAT} from 
 class DirectiveController {
 
     /*@ngInject*/
-    constructor($scope, $attrs, dateTimePickerValidator, dateTimePickerConfig) {
+    constructor($scope, $attrs, dateTimePickerValidator, dateTimePickerConfig, $element) {
         this.$scope = $scope;
         this.dateTimePickerValidator = dateTimePickerValidator;
         this.dateTimePickerConfig = dateTimePickerConfig;
         this.$attrs = $attrs;
+        this.$element = $element;
     }
 
     $onInit() {
@@ -341,6 +342,9 @@ class DirectiveController {
         }
 
         this.onSetTime({newDate: dateTime.toJSDate(), oldDate});
+        if (this.$attrs.ngChange) {
+            this.$scope.$eval(this.$attrs.ngChange);
+        }
 
         return this.viewToModelFactory[this.configuration.startView](dateTime)
     }
