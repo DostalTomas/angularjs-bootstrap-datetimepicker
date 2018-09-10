@@ -4,7 +4,7 @@ const ExtractTextPlugin =  require('extract-text-webpack-plugin');
 const  CleanWebpackPlugin =  require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
 
     entry: {
         datetimepicker: ['./src/js/datetimepicker.module.js']
