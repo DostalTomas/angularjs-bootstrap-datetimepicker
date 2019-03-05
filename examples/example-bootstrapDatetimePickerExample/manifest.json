@@ -1,0 +1,7 @@
+{
+  "name": "example-bootstrapDatetimePickerExample",
+  "files": [
+    "index-production.html",
+    "script.js"
+  ]
+}

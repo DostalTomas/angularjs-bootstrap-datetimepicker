@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-bootstrapDatetimePickerExample</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="https://dostaltomas.github.io/angularjs-bootstrap-datetimepicker/angularjs-bootstrap-datetimepicker.css" rel="stylesheet" type="text/css">
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.7/angular.js"></script>
+  <script src="https://unpkg.com/@kpsys/angularjs-register@1.1.4/dist/register.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@1.11.4/build/global/luxon.min.js"></script>
+  <script src="https://dostaltomas.github.io/angularjs-bootstrap-datetimepicker/angularjs-bootstrap-datetimepicker.js"></script>
+  <script src="/bower_components/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>
+  <script src="script.js"></script>
+  
+
+  
+</head>
+<body ng-app="bootstrapDatetimePickerExample">
+  <main class="container-fluid">
+     <datetimepicker ng-model="datetime"></datetimepicker>
+     <div class="row">
+         <div class="col-lg-3">
+             <input class="form-control" disabled="true" ng-model="datetime">
+         </div>
+     </div>
+</main>
+</body>
+</html>

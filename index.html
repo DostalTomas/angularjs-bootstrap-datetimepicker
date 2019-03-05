@@ -1,425 +1,65 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html ng-app="docApp">
+  <head>
+    <!-- <base href="/" ></base> -->
+    <title>Documents</title>
+    <meta charset="utf-8"></meta>
 
-<head>
-    <meta charset=utf-8/>
-    <title>Angular Bootstrap Datetime picker</title>
-    <link type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link type="text/css" href="https://rawgit.com/dalelotts/angularjs-bootstrap-datetimepicker/master/src/css/datetimepicker.css" rel="stylesheet">
-    <link type="text/css" href="stylesheets/styles.css" rel="stylesheet">
-    <script src="https://use.fontawesome.com/268d728e7f.js"></script>
-</head>
+    <!-- build:css({app,.tmp,src}) styles/vendor.css -->
+      <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+      <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,src,app}) styles/app.css -->
+      <link rel="stylesheet" href="styles/docs.css" />
+      <link rel="stylesheet" href="styles/runnableExample.css" />
+      <link rel="stylesheet" href="styles/github.css" />
+    <!-- endbuild -->
 
-<body data-ng-app="demo">
+  </head>
+  <body flex layout-fill>
+    <div flex-md
+     layout="row"
+     layout-align="center end"
+     layout-fill
+     ng-controller="DocsCtrl as docs"
+     ng-include="'views/main.html'"></div>
 
-<header class="jumbotron text-center" id="overview">
-    <div class="container">
+    <!-- build:js({app,.tmp}) scripts/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-animate/angular-animate.js"></script>
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/google-code-prettify/src/prettify.js"></script>
+      <script src="bower_components/angular-aria/angular-aria.js"></script>
+      <script src="bower_components/angular-messages/angular-messages.js"></script>
+      <script src="bower_components/angular-material/angular-material.js"></script>
+      <script src="bower_components/long/dist/long.js"></script>
+      <script src="bower_components/bytebuffer/dist/bytebuffer.js"></script>
+      <script src="bower_components/iframe-resizer/js/iframeResizer.min.js"></script>
+      <!-- endbower -->
+    <!-- endbuild -->
 
-        <h1>Angular Datetime Picker</h1>
-
-        <p>Native AngularJS datetime picker directive styled by Twitter Bootstrap</p>
-
-        <p class="btn-group">
-            <a class="btn btn-default" href="https://github.com/dalelotts/angularjs-bootstrap-datetimepicker">
-              <i class="fa fa-github" aria-hidden="true"></i> Code on Github
-            </a>
-            <a class="btn btn-primary"
-               href="https://github.com/dalelotts/angularjs-bootstrap-datetimepicker/releases/latest">
-                <i class="icon-download-alt icon-white"></i>Download
-                <small>(latest release)</small>
-            </a>
-        </p>
- </div>
-    <div class="bs-docs-social">
-        <div class="container">
-            <ul class="bs-docs-social-buttons">
-                <li>
-                    <iframe src="https://ghbtns.com/github-btn.html?user=dalelotts&amp;repo=angularjs-bootstrap-datetimepicker&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-                </li>
-                <li>
-                    <iframe src="https://ghbtns.com/github-btn.html?user=dalelotts&amp;repo=angularjs-bootstrap-datetimepicker&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
-                </li>
-            </ul>
-        </div>
-    </div>
-</header>
-
-<div class="container main" data-ng-app="ui.bootstrap.datetimepicker">
-
-    <section id="inline">
-        <div class="page-header">
-            <h2>Examples</h2>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <h3>Embedded calendar </h3>
-
-                <p>Display a calendar embedded in the page.</p>
-
-          <div class="well">
-            Selected Date: {{ data.embeddedDate | date:'yyyy-MMM-dd' }}
-            <datetimepicker data-ng-model="data.embeddedDate" data-datetimepicker-config="{ startView:'day', minView:'day' }" ></datetimepicker>
-           </div>
-
-          <h4>Why?</h4>
-
-          <p>Allows the user to select a date/time directly on the page</p>
-        </div>
-        <div class="col-sm-6">
-          <h3>How?</h3>
-            <p>You can pass configuration options as a function or an object.</p>
-            <pre class="prettyprint"><ol class="linenums"><li class="L0"><span class="pln">Selected Date: <span class="atv">{</span>{ data.date | date:'yyyy-MM-dd a' }<span class="atv">}</span></span></li><li class="L1"><span class="pln">&nbsp;</span></li><li class="L2"><span class="tag">&lt;datetimepicker</span><span class="pln"> </span><span class="atn">data-ng-model</span><span class="pun">=</span><span class="atv">"data.embeddedDate"</span></li><li class="L3">    <span class="atn">data-datetimepicker-config</span><span class="pun">=</span><span class="atv">"{ startView:'day', minView:'day' }"</span><span class="tag"> /&gt;</span></li></ol></pre>
-        </div>
-      </div>
-    </section>
-    <hr/>
-    <section id="drop-down">
-      <div class="row">
-        <div class="col-sm-6">
-            <h3>Drop-down using text link </h3>
-            <p>Display the calendar inside a bootstrap dropdown component.</p>
-
-            <div class="well">
-                Selected Date: {{ data.dateDropDownLink | date:'yyyy-MM-dd HH:mm a' }}
-                <div class="dropdown">
-                    <a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#">
-                        Click here to show calendar
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.dateDropDownLink" data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <h3>Why?</h3>
-
-            <p>Allows the user to select a date/time from a drop-down component to save space on the page.</p>
-        </div>
-      </div>
-        <h3>How?</h3>
-        <p>Use bootstrap's dropdown component to display/hide calendar.</p>
-        <pre class="prettyprint"><ol><li class="li1"><div class="de1">Selected Date: {{ data.dateDropDownLink | date:'yyyy-MM-dd HH:mm a' }}</div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"dropdown"</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;<span class="kw2">a</span> &nbsp;<span class="kw3">class</span><span class="sy0">=</span><span class="st0">"dropdown-toggle"</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">"dropdown1"</span> role<span class="sy0">=</span><span class="st0">"button"</span> data-toggle<span class="sy0">=</span><span class="st0">"dropdown"</span> data-<span class="kw3">target</span><span class="sy0">=</span><span class="st0">"#"</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">"#"</span>&gt;</span>Click here to show calendar<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;<span class="kw2">ul</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"dropdown-menu"</span> role<span class="sy0">=</span><span class="st0">"menu"</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;datetimepicker data-ng-model<span class="sy0">=</span><span class="st0">"data.dateDropDownLink"</span> data-datetimepicker-config<span class="sy0">=</span><span class="st0">"{ dropdownSelector: '#dropdown1' }"</span><span class="sy0">/</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li></ol></pre>
-    </section>
-    <hr/>
-    <section id="drop-down-input">
-      <div class="row">
-        <div class="col-sm-6">
-            <h3>Drop-down Datetime with input box</h3>
-            <p>Display the calendar inside a bootstrap dropdown component.</p>
-
-            <div class="well">
-                <div class="dropdown">
-                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
-                        <div class="input-group">
-                            <input type="text" class="form-control" data-ng-model="data.dateDropDownInput">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker data-ng-model="data.dateDropDownInput" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <h3>Why?</h3>
-
-           <p>Allows the user to select a date/time from a drop-down component to save space on the page.</p>
-        </div>
-      </div>
-        <h3>How?</h3>
-        <p>Use bootstrap's dropdown component to display/hide calendar.</p>
-        <pre class="prettyprint"><code class="html5"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"dropdown"</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"dropdown-toggle"</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">"dropdown2"</span> role<span class="sy0">=</span><span class="st0">"button"</span> data-toggle<span class="sy0">=</span><span class="st0">"dropdown"</span> data-<span class="kw3">target</span><span class="sy0">=</span><span class="st0">"#"</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">"#"</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"input-group"</span>&gt;&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">"text"</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"form-control"</span> data-ng-model<span class="sy0">=</span><span class="st0">"data.dateDropDownInput"</span>&gt;&lt;<span class="kw2">span</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"input-group-addon"</span>&gt;&lt;<span class="kw2">i</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"glyphicon glyphicon-calendar"</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">i</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">span</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;<span class="kw2">ul</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">"dropdown-menu"</span> role<span class="sy0">=</span><span class="st0">"menu"</span> aria-labelledby<span class="sy0">=</span><span class="st0">"dLabel"</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;datetimepicker data-ng-model<span class="sy0">=</span><span class="st0">"data.dateDropDownInput"</span> data-datetimepicker-config<span class="sy0">=</span><span class="st0">"{ dropdownSelector: '#dropdown2' }"</span><span class="sy0">/</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li></ol></code></pre>
-    </section>
-    <hr/>
-
-    <section id="date-range-picker" data-ng-controller="dateRangeController">
-        <div class="row">
-            <div class="col-sm-6">
-                <h3>Date Range Picker</h3>
-                <p>Use two date pickers to create a date range picker.</p>
-
-                <div class="well">
-                    <div class="dropdown form-group">
-                        <label for="dateRangeStart">Start Date</label>
-                        <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown" data-target="#"
-                           href="#">
-                            <div class="input-group date">
-                                <input id="dateRangeStart" type="text" class="form-control" data-ng-model="dateRangeStart">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                            </div>
-                        </a>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <datetimepicker data-ng-model="dateRangeStart"
-                                            data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
-                                            data-on-set-time="startDateOnSetTime()"
-                                            data-before-render="startDateBeforeRender($dates)"></datetimepicker>
-                        </ul>
-                    </div>
-
-                    <div class="dropdown form-group">
-                        <label for="dateRangeStart">End Date</label>
-                        <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown" data-target="#"
-                           href="#">
-                            <div class="input-group date">
-                                <input type="text" class="form-control" data-ng-model="dateRangeEnd">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                            </div>
-                        </a>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <datetimepicker data-ng-model="dateRangeEnd"
-                                            data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
-                                            data-on-set-time="endDateOnSetTime()"
-                                            data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <h3>Why?</h3>
-
-                <p>Prevent the user from accidentally selecting an end date that is before the start date.</p>
-
-                <h3>How?</h3>
-                <p>See the <a href="https://github.com/dalelotts/angularjs-bootstrap-datetimepicker#create-a-date-range-picker-with-validation-controls">Read me file</a></p>
-            </div>
-        </div>
-   </section>
-
-    <h2>Callback functions</h2>
-    <section id="beforeRender">
-        <h3><a id="user-content-before-render" class="anchor" href="#before-render" aria-hidden="true"><span
-                class="octicon octicon-link"></span></a>before-render</h3>
-
-        <p>Attribute on datetimepicker element</p>
-        <p>Function. Default: <code>null</code></p>
-
-        <p>If the value of the before-render attribute is a function, the date time picker will call this function
-            before rendering a new view, passing in data about the view.</p>
-
-        <div class="highlight highlight-text-html-basic">
-            <pre>&lt;<span class="pl-ent">datetimepicker</span> <span class="pl-e">data-ng-model</span>=<span
-                    class="pl-s"><span class="pl-pds">"</span>data.date<span class="pl-pds">"</span></span> <span
-                    class="pl-e">data-before-render</span>=<span class="pl-s"><span class="pl-pds">"</span>beforeRender($view, $dates, $leftDate, $upDate, $rightDate)<span
-                    class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">datetimepicker</span>&gt;</pre>
-        </div>
-
-        <p>This function will be called every time a new view is rendered.</p>
-
-        <div class="highlight highlight-source-js">
-<pre><span class="pl-c1">$scope</span>.<span class="pl-en">beforeRender</span> <span
-                class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">$view</span>, <span
-                class="pl-smi">$dates</span>, <span class="pl-smi">$leftDate</span>, <span class="pl-smi">$upDate</span>, <span
-                class="pl-smi">$rightDate</span>) {
-    <span class="pl-k">var</span> index <span class="pl-k">=</span> <span class="pl-c1">Math</span>.<span class="pl-c1">floor</span>(<span
-                    class="pl-c1">Math</span>.<span class="pl-c1">random</span>() <span
-                    class="pl-k">*</span> $dates.<span class="pl-c1">length</span>);
-    $dates[index].selectable <span class="pl-k">=</span> <span class="pl-c1">false</span>;
-}</pre>
-        </div>
-
-        <p>The following parameters are supplied by this directive :</p>
-
-        <ul>
-            <li>'$view' the name of the view to be rendered</li>
-            <li>'$dates' a (possibly empty) array of DateObject's (see source) that the user can select in the view.
-            </li>
-            <li>'$leftDate' the DateObject selected if the user clicks the left arrow.</li>
-            <li>'$upDate' the DateObject selected if the user clicks the text between the arrows.</li>
-            <li>'$rightDate' the DateObject selected if the user clicks the right arrow.</li>
-        </ul>
-
-<pre><code>DateObject {
-    utcDateValue: Number - UTC time value of this date object. It does NOT contain time zone information so take that
-    into account when comparing to other dates (or use localDateValue function).
-    localDateValue: FUNCTION that returns a Number - local time value of this date object - same as moment.valueOf() or
-    Date.getTime().
-    display: String - the way this value will be displayed on the calendar.
-    active: true | false | undefined - indicates that date object is part of the model value.
-    selectable: true | false | undefined - indicates that date value is selectable by the user.
-    past: true | false | undefined - indicates that date value is prior to the date range of the current view.
-    future: true | false | undefined - indicates that date value is after the date range of the current view.
-}
-</code></pre>
-
-        <p>Setting the .selectable property of a DateObject to false will prevent the user from being able to select
-            that date value.</p>
-    </section>
-    <section id="onSetTime">
-                <h3>on-set-time</h3>
-                <p>Attribute on datetimepicker element</p>
-                <p>Function. Default: <code>null</code></p>
-
-                <p>If the value of the on-set-time attribute is a function, the date time picker will call this function
-                    passing in the selected value and previous value.</p>
-
-                <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">datetimepicker</span> <span class="pl-e">data-ng-model</span>=<span class="pl-s"><span class="pl-pds">"</span>data.date<span class="pl-pds">"</span></span> <span class="pl-e">data-on-set-time</span>=<span class="pl-s"><span class="pl-pds">"</span>onTimeSet(newDate, oldDate)<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">datetimepicker</span>&gt;</pre></div>
-
-                <p>This function will be called when the user selects a value on the minView.</p>
-
-                <div class="highlight highlight-source-js"><pre><span class="pl-c1">$scope</span>.<span class="pl-en">onTimeSet</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">newDate</span>, <span class="pl-smi">oldDate</span>) {
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(newDate);
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(oldDate);
-}</pre></div>
-
-                <p>data-on-set-time="onTimeSet()"  &lt;-- This will work</p>
-
-                <p>data-on-set-time="onTimeSet"    &lt;-- <strong>This will NOT work, the ()'s are required</strong></p>
-    </section>
-
-    <hr/>
-    <section id="configuration">
-        <h2>Configuration Options</h2>
-        <p>The <strong>datetimepicker-config</strong> attribute defines the configuration options.</p>
-        <p>This attribute can be an object or a function.</p>
-        <section id="minMaxView">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3>minView</h3>
-
-                    <p>String. Default: <code>'minute'</code></p>
-                    <p>The view that will trigger date selection when the user clicks on one of the date/time values.</p>
-                </div>
-                <div class="col-sm-6">
-                    <h3>minuteStep</h3>
-                    <p>Number. Default: <code>5</code></p>
-                    <p>The increment used to build the hour view. A button is created for each minuteStep minutes.</p>
-                </div>
-            </div>
-        </section>
-        <section id="startView">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3>startView</h3>
-
-                    <p>String. Default: <code>'day'</code></p>
-                    <p>The view that the datetimepicker should show when it is opened.</p>
-                    <div class="well">
-                        <p>Accepts values of :</p>
-                        <dl>
-                            <dt>minute</dt>
-                            <dd>for the minute view</dd>
-                            <dt>hour</dt>
-                            <dd>for the hour view</dd>
-                            <dt>day</dt>
-                            <dd>for the day view (the default)</dd>
-                            <dt>month</dt>
-                            <dd>for the month view (12-months of the selected year)</dd>
-                            <dt>year</dt>
-                            <dd>for the year view (12-year range)</dd>
-                        </dl>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <h3>dropdownSelector</h3>
-                    <p>String. Default: <code>null</code></p>
-
-                    <p>When used within a Bootstrap dropdown, the selector specified in dropdownSelector will toggle the
-                        dropdown when a date/time is selected.</p>
-                </div>
-            </div>
-        </section>
-        <section id="eventListeners">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3>configureOn</h3>
-
-                    <p>String. Default: <code>null</code></p>
-                    <p>Accepts any string value</p>
-                    <p>Causes the date/time picker to re-read its configuration when the specified event is received.</p>
-                    <p>For example, perhaps the startView option in the configuration has changed and you would like the new
-                        configuration to be used. You can $broadcast the event to cause this directive to use the new configuration.</p>
-                </div>
-                <div class="col-sm-6">
-                    <h3>renderOn</h3>
-
-                    <p>String. Default: <code>null</code></p>
-                    <p>Accepts any string value</p>
-                    <p>Causes the date/time picker to re-render its view when the specified event is received.</p>
-                    <p>For example, if you want to disable any dates or times that are in the past. You can $broadcast
-                        the event at an interval to disable times in the past (or any other time valid dates change).</p>
-                </div>
-            </div>
-        </section>
-    </section>
-    <section id="licenseFAQ">
-        <h1 id="license-faqs" class="page-header">License FAQs</h1>
-        <p class="lead">angularjs-bootstrap-datetimepicker is released under the MIT license and is copyright 2015 Knight Rider Consulting, Inc.. Boiled down to smaller chunks, it can be described with the following conditions.</p>
-
-        <h2>It requires you to:</h2>
-        <ul>
-            <li>Keep the license and copyright notice included in angularjs-bootstrap-datetimepicker's CSS and JavaScript files when you use them in your works</li>
-        </ul>
-
-        <h2>It permits you to:</h2>
-        <ul>
-            <li>Freely download and use angularjs-bootstrap-datetimepicker, in whole or in part, for personal, private, company internal, or commercial purposes</li>
-            <li>Use angularjs-bootstrap-datetimepicker in packages or distributions that you create</li>
-            <li>Modify the source code</li>
-            <li>Grant a sublicense to modify and distribute angularjs-bootstrap-datetimepicker to third parties not included in the license</li>
-        </ul>
-
-        <h2>It forbids you to:</h2>
-        <ul>
-            <li>Hold the authors and license owners liable for damages as angularjs-bootstrap-datetimepicker is provided without warranty</li>
-            <li>Hold the creators or copyright holders of angularjs-bootstrap-datetimepicker liable</li>
-            <li>Redistribute any piece of angularjs-bootstrap-datetimepicker without proper attribution</li>
-            <li>Use any marks owned by Knight Rider Consulting, Inc. in any way that might state or imply that Knight Rider Consulting, Inc. endorses your distribution</li>
-            <li>Use any marks owned by Knight Rider Consulting, Inc. in any way that might state or imply that you created the Knight Rider Consulting, Inc. software in question</li>
-        </ul>
-
-        <h2>It does not require you to:</h2>
-        <ul>
-            <li>Include the source of angularjs-bootstrap-datetimepicker itself, or of any modifications you may have made to it, in any redistribution you may assemble that includes it</li>
-            <li>Submit changes that you make to angularjs-bootstrap-datetimepicker back to the angularjs-bootstrap-datetimepicker project (though such feedback is encouraged)</li>
-        </ul>
-
-        <p>The full angularjs-bootstrap-datetimepicker license is located <a href="https://github.com/dalelotts/angularjs-bootstrap-datetimepicker/blob/master/LICENSE">in the project repository</a> for more information.</p>
-    </section>
-
-</div>
-
-
-
-<hr/>
-
-<p>This project is maintained by <a href="https://github.com/dalelotts">dalelotts</a></p>
-
-<div class="loadingAnimation" data-ng-show="isLoading">
-    <div class="bowl_ringG">
-        <div class="ball_holderG">
-            <div class="ballG">
-            </div>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
-<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/dalelotts/angularjs-bootstrap-datetimepicker/master/src/js/datetimepicker.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/dalelotts/angularjs-bootstrap-datetimepicker/master/src/js/datetimepicker.templates.js"></script>
-<script type="text/javascript" src="./javascripts/app.js"></script>
-
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-325325-19', 'dalelotts.github.io');
-    ga('send', 'pageview');
-
-</script>
-</body>
-
+    <!-- build:js({app,.tmp}) scripts/app.js -->
+      <!-- inject:env_ignore -->
+      <!-- endinject -->
+      <script src="scripts/examples.js"></script>
+      <script src="scripts/index.js"></script>
+      <script src="scripts/pre.directive.js"></script>
+      <script src="scripts/a.directive.js"></script>
+      <script src="scripts/docs.controller.js"></script>
+      <script src="scripts/main.controller.js"></script>
+      <script src="scripts/navbar.controller.js"></script>
+      <script src="scripts/search.controller.js"></script>
+      <script src="scripts/bloomfilter.js"></script>
+      <script src="data/config.js"></script>
+      <script src="data/area-data.js"></script>
+      <script src="data/nav-data.js"></script>
+      <!-- inject:partials -->
+      <!-- angular templates will be automaticaly converted in js and inserted here -->
+      <!-- endinject -->
+    <!-- endbuild -->
+  </body>
 </html>

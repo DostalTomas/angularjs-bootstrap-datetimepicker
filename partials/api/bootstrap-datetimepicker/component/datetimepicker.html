@@ -1,0 +1,343 @@
+
+
+
+
+<header class="api-profile-header">
+  <h1 class="api-profile-header-heading">datetimepicker</h1>
+  <ol class="api-profile-header-structure naked-list step-list">
+    
+    <li>
+      - component in module <a href="api/bootstrap-datetimepicker">bootstrap-datetimepicker</a>
+    </li>
+  </ol>
+</header>
+
+
+
+<div class="api-profile-description">
+  <p>Native AngularJS date &amp; time picker directive styled by Twitter Bootstrap. Based on <a href="https://github.com/dalelotts/angularjs-bootstrap-datetimepicker">dalelotts/angularjs-bootstrap-datetimepicker</a>.</p>
+<p><strong>! It is important to set locale in Luxon !</strong></p>
+<pre><code>import {DateTime, Settings} from &#39;luxon&#39;;
+Settings.defaultLocale = DateTime.local().resolvedLocaleOpts().locale;
+</code></pre>
+
+</div>
+
+
+
+
+
+
+<div>
+  
+  <h2 id="dependencies">Dependencies</h2>
+  <ul>
+    <li><a href="https://docs.angularjs.org/api/ng/type/ngModel.NgModelController" _target="blank">ngModel.NgModelController</a></li>
+  </ul>
+  
+
+  
+  
+  <h2 id="usage">Usage</h2>
+  <div class="usage">
+  
+
+  
+  <pre><code>&lt;datetimepicker&#10;    [before-render=&quot;expression&quot;]&#10;    [on-set-time=&quot;expression&quot;]&#10;    [view-format=&quot;string&quot;]&#10;    [datetimepicker-config=&quot;DateTimePickerConfiguration&quot;]&gt;&#10;&lt;/datetimepicker&gt;</code></pre>
+  </div>
+  
+<section class="api-section">
+  <h3>Arguments</h3>
+
+<table class="variables-matrix input-arguments ">
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>
+        beforeRender
+        
+        <div><em>(optional)</em></div>
+      </td>
+      <td>
+        <span class="label type-hint type-hint-expression"><a href="expression">expression</a></span>
+      </td>
+      <td>
+        <p>If the value of the before-render attribute is a function, the date time picker will call this function before rendering a new view, passing in data about the view.</p>
+<pre><code>&lt;datetimepicker data-ng-model=&quot;data.date&quot; data-before-render=&quot;beforeRender($view, $dates, $leftDate, $upDate, $rightDate)&quot;&gt;&lt;/datetimepicker&gt;
+</code></pre>
+<p> This function will be called every time a new view is rendered.</p>
+<pre><code>$scope.beforeRender = function ($view, $dates, $leftDate, $upDate, $rightDate) {
+    const index = Math.floor(Math.random() * $dates.length);
+    $dates[index].selectable = false;
+}
+</code></pre>
+<p>Setting the <code>.selectable</code> property of a <a href="api/bootstrap-datetimepicker/type/DateObject">DateObject</a> to false will prevent the user from being able to select that date value.</p>
+
+        
+        
+<table class="variables-matrix input-arguments ">
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>
+        $view
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-string"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" _target="blank">String</a></span>
+      </td>
+      <td>
+        <p>the name of the view to be rendered</p>
+
+        
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        $dates
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-dateobject"><a href="api/bootstrap-datetimepicker/type/DateObject">Array.&lt;DateObject&gt;</a></span>
+      </td>
+      <td>
+        <p>a (possibly empty) array of DateObject&#39;s (see source) that the user can select in the view.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        $leftDate
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-dateobject"><a href="api/bootstrap-datetimepicker/type/DateObject">DateObject</a></span>
+      </td>
+      <td>
+        <p>the DateObject selected if the user clicks the left arrow.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        $upDate
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-dateobject"><a href="api/bootstrap-datetimepicker/type/DateObject">DateObject</a></span>
+      </td>
+      <td>
+        <p>the DateObject selected if the user clicks the text between the arrows.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        $rightDate
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-dateobject"><a href="api/bootstrap-datetimepicker/type/DateObject">DateObject</a></span>
+      </td>
+      <td>
+        <p>the DateObject selected if the user clicks the right arrow.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        onSetTime
+        
+        <div><em>(optional)</em></div>
+      </td>
+      <td>
+        <span class="label type-hint type-hint-expression"><a href="expression">expression</a></span>
+      </td>
+      <td>
+        <p>If the value of the on-set-time attribute is a function, the date time picker will call this function passing in the selected value and previous value.</p>
+<pre><code>&lt;datetimepicker data-ng-model=&quot;data.date&quot; data-on-set-time=&quot;onTimeSet(newDate, oldDate)&quot;&gt;&lt;/datetimepicker&gt;
+</code></pre>
+<p>This function will be called when the user selects a value on the minView.</p>
+<pre><code>$scope.onTimeSet = function (newDate, oldDate) {
+     console.log(newDate);
+     console.log(oldDate);
+}
+</code></pre>
+<p><code>data-on-set-time=&quot;onTimeSet()&quot;</code> &lt;-- This will work</p>
+<p><code>data-on-set-time=&quot;onTimeSet&quot;</code> &lt;-- This will NOT work, the ()&#39;s are required</p>
+
+        
+        
+<table class="variables-matrix input-arguments ">
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>
+        newDate
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-date"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" _target="blank">Date</a></span>
+      </td>
+      <td>
+        <p>New date. Probably JS Date object.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        oldDate
+        
+        
+      </td>
+      <td>
+        <span class="label type-hint type-hint-date"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" _target="blank">Date</a></span>
+      </td>
+      <td>
+        <p>Old date. Probably JS Date object.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        viewFormat
+        
+        <div><em>(optional)</em></div>
+      </td>
+      <td>
+        <span class="label type-hint type-hint-string"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" _target="blank">String</a></span>
+      </td>
+      <td>
+        <p>Luxon format. If defined, ngModel will be formatted to this format. By default ngModel is formatted to ISO standard.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        datetimepickerConfig
+        
+        <div><em>(optional)</em></div>
+      </td>
+      <td>
+        <span class="label type-hint type-hint-datetimepickerconfiguration"><a href="api/bootstrap-datetimepicker/type/DateTimePickerConfiguration">DateTimePickerConfiguration</a></span>
+      </td>
+      <td>
+        <p>Datetime picker configuration.</p>
+
+        
+        
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+</section>
+  
+  
+
+
+  
+  <h2 id="example">Example</h2><p>
+
+<plnkr-opener example-path="examples/example-bootstrapDatetimePickerExample"></plnkr-opener>
+<div class="runnable-example"
+    path="examples/example-bootstrapDatetimePickerExample"
+    frame-id="example-bootstrapDatetimePickerExample"
+    name="bootstrapDatetimePickerExample"
+    module="bootstrapDatetimePickerExample"
+    frame-no-resize="true">
+
+  <md-content>
+    <md-tabs md-dynamic-height="false" md-border-bottom>
+    
+      <md-tab label="index.html">
+        <md-content class="md-padding">
+          <div class="runnable-example-file" name="index.html"language="html"type="html">
+          <pre><code>&lt;main class=&quot;container-fluid&quot;&gt;&#10;     &lt;datetimepicker ng-model=&quot;datetime&quot;&gt;&lt;/datetimepicker&gt;&#10;     &lt;div class=&quot;row&quot;&gt;&#10;         &lt;div class=&quot;col-lg-3&quot;&gt;&#10;             &lt;input class=&quot;form-control&quot; disabled=&quot;true&quot; ng-model=&quot;datetime&quot;&gt;&#10;         &lt;/div&gt;&#10;     &lt;/div&gt;&#10;&lt;/main&gt;</code></pre>
+          </div>
+        </md-content>
+      </md-tab>
+    
+      <md-tab label="script.js">
+        <md-content class="md-padding">
+          <div class="runnable-example-file" name="script.js"language="js"type="js">
+          <pre><code>luxon.Settings.defaultLocale = luxon.DateTime.local().resolvedLocaleOpts().locale;&#10;angular.module(&#39;bootstrapDatetimePickerExample&#39;, [&#39;bootstrap-datetimepicker&#39;]);</code></pre>
+          </div>
+        </md-content>
+      </md-tab>
+    
+    </md-tabs>
+  </md-content>
+  <iframe class="runnable-example-frame" src="examples/example-bootstrapDatetimePickerExample/index.html" name="example-bootstrapDatetimePickerExample" id="example-bootstrapDatetimePickerExample"></iframe>
+</div>
+
+
+
+</p>
+
+</div>
+
+
