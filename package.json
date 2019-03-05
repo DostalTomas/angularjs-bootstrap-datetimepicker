@@ -97,7 +97,7 @@
     "demo": "webpack-dev-server --config webpack.demo.config.js --progress",
     "docs:build": "grunt docs:build",
     "docs:watch": "grunt docs:watch",
-    "docs:serve": "http-server dist/docs -p 3001 ",
+    "docs:serve": "http-server docs -p 3001 ",
     "test": "karma start test/karma.conf.js"
   },
   "repository": {

@@ -3,7 +3,7 @@ module.exports = (grunt) => {
 
     grunt.initConfig({
         'extract-comments': {
-            'dist/docs/comments.js': ['src/**/*.ts']
+            'docs/comments.js': ['src/**/*.ts']
         },
         copy: {
             files: {
@@ -56,9 +56,9 @@ module.exports = (grunt) => {
                 title: 'AngularJS Bootstrap DateTime Picker Doc',
                 version: pkg.version,
                 expand: false,
-                dest: 'dist/docs',
+                dest: 'docs',
                 src: [
-                    'dist/docs/comments.js',
+                    'docs/comments.js',
                     'src/**/*.ngdoc'
                 ]
             }
