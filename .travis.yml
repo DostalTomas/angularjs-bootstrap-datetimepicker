@@ -1,26 +1,40 @@
-sudo: false
 language: node_js
-cache:
-  directories:
-    - node_modules
-notifications:
-  email: false
-node_js:
-  - '8'
-addons:
-  firefox: 'latest'
+
+sudo: false
+
+os: linux
+
+env:
+  global:
+    - NODE_VERSION=10
+    - secure: aeUMsG+O/UjJGIznMPLHa5Z47pFKBtC7X6J4Igu+TfLXnN0qyAHRKof4gVm8m+aMUpReo2eLAEj1+BnWVrRq0ZEOR1MIxuhwAAgn27R/6F0k7knhCoTbLnkr9N6p+wxenDx1+HrHRdrMh8XVRolAuYmyicpVJQF21FS0k2y+uwqrUuXrGYUt6G+mIZs4Tf4VY21KvUSzzGFwhflubpEkAkVY0irXuADlrI2U3GHD51uIrvZr8N/dG3V+hXtL/vh3GK8jjbGjsdrrZDtIIolpnN/+eiFXN8KskMhAWSsp9yUoMpslIJrLHcM6dbMNJqfr9q++vV7BBLblklMc4eEvGwcKU+cjOKSZrI3+EAvql1FEFfz6Tfq51u//KbqX6hSq5gpbGr6oVG/OO7Cmxa5mw+rCKDhvol2D3qrbzKnZZ25UibuolzY6bjyDsT8iHYrEWYzr3zl9bRjWQsOZW0IsTGX1EKDPRjSeKmeIQQD0WKeSF6aMTAXM7rUGD8hj19t+ikv3CbmWPHqDyWa4SjnxdnRKYx3qBTI9czMzpf5Y5eNsnMOnTTNqDcLqw5qP/kZ4M5skDj1POwTH8D9H33Fs4JZ0RUPlT9wNfPDmSAHSXXMOuYqNyIjMmsv/f32e6bOBY0BqGGKiav3DnMabEfGJzMPiqQXHVZHe3C1xJLKvbzI=
+    - secure: sVFfVW3kXaQxlCjyVhcaUwEaYWZW2zeXBrxgTLC0LGlLeoVp3HZzKqOSNhd8JfeP54PFXybCaiSxXS44MH9dDfwbhFVM8l8SsYpu0l2TqN+kf9SLNhHO+RWDylhbjbZNHTtDXJJ35bNIscaf8zuRRGh9+bQFCE4gkQzwbfWQcVSaKrfkuZ9cAx7iNIWepUmxtB6Jaau3bovpzS2ewNBxeV7eb0HxRv6RGqgG3tJR0kSsUTs6IedG6IQTa40DJtFV4IHyHWVHn39ZJVnVAZZbnIJcx4i3XwfEnbCYAG7iiTNi2tLYsXMnOose6rZg7E7uo0gmOCpDxs7YX09ijkW4GbsMJ6JCQsJzeNsO8lbMHLghPIttF3hKu2E3tIrFBSdV7tsRykO4xW6JFoi9jh9liIvjb9CvEmZUyKIYN+c60GjXe/Ak2Mv/VXfO/9lDHEphDWsqELtH7Eozm4pmKPzxf5BoVYpEJSec2Do0AAaA6HPrTDzmZizdSyNLiXyIUvgsq6g7HOhZWWWtGxBfmqDJFCNWw9i9suTb4dhFkBruJRRS6xxLwz+A0/zwNBd6niz1x1SfYs/nViVwKzWhpd5U01bGbjc3iZJ1Yg/S1kcNi4jxwWj/cFXidmLS60kL6kjdEi9RKIElwoP4rznqnfUJjPSZug5ztvzZfsXU5LzhweI=
+
 before_install:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3 # give xvfb some time to start
-before_script:
-  - npm prune
+  - nvm install $NODE_VERSION
+  - npm install -g npm@6 && node -v && npm -v
+  -
+install:
+  - npm ci
+  -
 script:
-  - npm run test
-after_success:
-  - npm run semantic-release
-  - npm run coverage:upload
-branches:
-  except:
-    - "/^v\\d+\\.\\d+\\.\\d+$/"
-    - gh-pages
+  - npm run lib:prod
+#  - npm test
+  - EXAMPLES_SCRIPTS_URL_PREFIX="https://dostaltomas.github.io/angularjs-bootstrap-datetimepicker"
+    npm run docs:build
+
+deploy:
+  - provider: pages
+    skip-cleanup: true
+    github-token: "$GH_TOKEN"
+    keep-history: true
+    local_dir: dist/docs
+    on:
+      branch: master
+  - provider: npm
+    email: tomas.dostal@kpsys.cz
+    api_key: "$NPM_TOKEN"
+    skip_cleanup: true
+    on:
+      branch: master
+      tags: true

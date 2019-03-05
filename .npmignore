@@ -2,3 +2,4 @@ node_modules
 .idea
 .travis.yml
 source
+dist/docs
