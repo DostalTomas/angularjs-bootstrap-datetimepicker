@@ -1,12 +1,12 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
 
     entry: {
-        'histogram-slider-demo': ['./demo/src/app/app.ts']
+        'angularjs-bootstrap-datetimepicker-demo': ['./demo/app.ts']
     },
 
     output: {
@@ -18,13 +18,19 @@ module.exports = {
         rules: [
             {
                 enforce: 'pre',
+                test: /\.js$/,
+                include: [/dist/],
+                loader: 'source-map-loader'
+            },
+            {
+                enforce: 'pre',
                 test: /\.ts$/,
-                include: [/src/],
+                include: [/demo/, /dist/],
                 loader: 'tslint-loader'
             },
             {
                 test: /\.ts$/,
-                include: [/src/],
+                include: [/demo/, /dist/],
                 use: [
                     {
                         loader: 'babel-loader',
@@ -33,17 +39,7 @@ module.exports = {
                                 'angularjs-annotate'
                             ],
                             presets: [
-                                [
-                                    'env',
-                                    {
-                                        'targets': {
-                                            'browsers': [
-                                                'last 2 versions',
-                                                'not ie < 11'
-                                            ]
-                                        }
-                                    }
-                                ]
+                                '@babel/preset-env'
                             ]
                         }
                     },
@@ -54,46 +50,52 @@ module.exports = {
             },
             {
                 test: /(\.less$)|(\.css$)/,
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                sourceMap: true
-                            }
-                        },
-                        {
-                            loader: 'less-loader',
-                            options: {
-                                sourceMap: true
-                            }
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
                         }
-                    ],
-                    fallback: 'style-loader'
-                })
-            },
-            {
-                test: /\.(gif|png|jpg)$/,
-                loader: 'file-loader?name=[name].[ext]'
-            },
-            {
-                test: /\.(otf|eot|ttf|woff|woff2|svg)$/,
-                loader: 'file-loader?name=[name].[ext]'
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ]
             },
             {
                 test: /\.tpl.pug$/,
-                loader: 'ngtemplate-loader!html-loader!pug-html-loader'
-            }
+                loader: `ngtemplate-loader!html-loader!pug-html-loader`
+            },
+            {
+                test: /\.(svg|png)$/,
+                loader: 'file-loader?name=[name].[ext]'
+            },
         ]
+    },
+
+    resolve: {
+        extensions: ['.js', '.ts']
     },
 
     optimization: {
         splitChunks: {
             cacheGroups: {
-                vendors: {
-                    test: isVendor,
+                jsVendors: {
+                    test: isJsVendor,
                     name: 'vendors',
                     chunks: 'all'
+                },
+                cssVendors: {
+                    test: isCssVendor,
+                    name: 'vendors',
+                    chunks: 'all',
+                    enforce: true
                 }
             }
         }
@@ -101,26 +103,30 @@ module.exports = {
 
     devtool: 'source-map',
 
-    resolve: {
-        extensions: ['.js', '.ts']
-    },
-
     devServer: {
         port: 3000,
-        contentBase: 'demo',
+        contentBase: '.',
         historyApiFallback: true
     },
 
     plugins: [
-        new ExtractTextPlugin({filename: '[name].css', disable: false, allChunks: true}),
+        new MiniCssExtractPlugin({
+            filename: '[name].css'
+        }),
         new HtmlWebpackPlugin({
-            template: 'html-loader!pug-html-loader!demo/src/index.pug'
+            template: 'html-loader!pug-html-loader!demo/index.pug'
         })
     ]
 };
 
-function isVendor({resource}) {
+function isJsVendor({resource}) {
     return resource &&
         resource.indexOf('node_modules') >= 0 &&
         resource.match(/.js$/);
+}
+
+function isCssVendor({resource}) {
+    return resource &&
+        resource.indexOf('node_modules') >= 0 &&
+        resource.match(/.css$/);
 }

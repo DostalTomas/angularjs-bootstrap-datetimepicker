@@ -5,17 +5,16 @@
     ],
     "jsRules": {},
     "rules": {
-        "quotemark": [
-            true,
-            "single"
-        ],
+        "quotemark": [true, "single"],
         "trailing-comma": false,
         "ordered-imports": false,
         "max-line-length": false,
         "no-trailing-whitespace": false,
         "interface-name": false,
         "object-literal-sort-keys": false,
-        "member-ordering": false
+        "member-ordering": false,
+        "prefer-template": true,
+        "max-classes-per-file": [true, 2]
     },
     "rulesDirectory": []
 }
