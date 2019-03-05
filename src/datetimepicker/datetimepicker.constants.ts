@@ -4,7 +4,11 @@ export const DAY_FORMAT = 'yyyy-LLL-dd';
 export const HOUR_FORMAT = 'yyyy-LL-dd H';
 export const MINUTE_FORMAT = 'yyyy-LL-dd H:mm';
 
-export const DEFAULT_LOCALIZATION = {
+export interface DateTimeLocalization {
+    [lang: string]: { next: string; previous: string };
+}
+
+export const DEFAULT_LOCALIZATION: DateTimeLocalization = {
     'bg': {previous: 'предишна', next: 'следваща'},
     'ca': {previous: 'anterior', next: 'següent'},
     'da': {previous: 'forrige', next: 'næste'},
