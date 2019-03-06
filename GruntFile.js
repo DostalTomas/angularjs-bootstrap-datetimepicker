@@ -10,7 +10,7 @@ module.exports = (grunt) => {
                 expand: true,
                 cwd: 'dist',
                 src: ['angularjs-bootstrap-datetimepicker.js', 'angularjs-bootstrap-datetimepicker.css'],
-                dest: 'dist/docs'
+                dest: 'docs'
             }
         },
         watch: {
