@@ -10,7 +10,7 @@ module.exports = (config) => {
             path.resolve(__dirname, '..', 'node_modules', 'jquery', 'dist', 'jquery.js'),
             path.resolve(__dirname, '..', 'node_modules', 'angular', 'angular.js'),
             path.resolve(__dirname, '..', 'node_modules', 'angular-mocks', 'angular-mocks.js'),
-            './src/**/*.spec.ts'
+            './test/**/*.spec.ts'
         ],
 
         preprocessors: {
