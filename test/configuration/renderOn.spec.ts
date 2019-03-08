@@ -1,5 +1,3 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, spyOn */
-
 /**
  * @license angularjs-bootstrap-datetimepicker
  * Copyright 2016 Knight Rider Consulting, Inc. http://www.knightrider.com
@@ -9,72 +7,76 @@
  * @since        7/21/13
  */
 
-describe('renderOn', function () {
-  'use strict'
-  var $rootScope
-  var $compile
-  beforeEach(module('ui.bootstrap.datetimepicker'))
-  beforeEach(inject(function (_$compile_, _$rootScope_) {
-    $compile = _$compile_
-    $rootScope = _$rootScope_
-    $rootScope.date = null
-  }))
+/* tslint:disable:variable-name */
+import * as jQuery from 'jquery';
+import dateTimePickerModule from './../../src/datetimepicker/datetimepicker.module';
+import angular = require('angular');
 
-  describe('throws exception', function () {
-    it('if value is an empty string', function () {
-      function compile () {
-        $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ renderOn: \'\' }"></datetimepicker>')($rootScope)
-        $rootScope.$digest()
-      }
+describe('renderOn', () => {
+    let $rootScope;
+    let $compile;
+    beforeEach(() => angular.mock.module(dateTimePickerModule));
+    beforeEach(inject((_$compile_, _$rootScope_) => {
+        $compile = _$compile_;
+        $rootScope = _$rootScope_;
+        $rootScope.date = null;
+    }));
 
-      expect(compile).toThrow(new Error('renderOn must not be an empty string'))
-    })
-    it('if value is numeric', function () {
-      function compile () {
-        $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ renderOn: 3 }"></datetimepicker>')($rootScope)
-        $rootScope.$digest()
-      }
+    describe('throws exception', () => {
+        it('if value is an empty string', () => {
+            function compile() {
+                $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ renderOn: \'\' }"></datetimepicker>')($rootScope);
+                $rootScope.$digest();
+            }
 
-      expect(compile).toThrow(new Error('renderOn must be a string'))
-    })
-  })
-  describe('does NOT throw exception', function () {
-    it('if value is a string', function () {
-      $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ renderOn: \'foo\' }"></datetimepicker>')($rootScope)
-    })
-  })
-  describe('renderOn event', function () {
-    it('causes view to re-render after event is received', function () {
-      var selectable = true
+            expect(compile).toThrow(new Error('renderOn must not be an empty string'));
+        });
+        it('if value is numeric', () => {
+            function compile() {
+                $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ renderOn: 3 }"></datetimepicker>')($rootScope);
+                $rootScope.$digest();
+            }
 
-      $rootScope.config = {
-        data: {
-          startView: 'year',
-          renderOn: 'valid-dates-changed'
-        }
-      }
+            expect(compile).toThrow(new Error('renderOn must be a string'));
+        });
+    });
+    describe('does NOT throw exception', () => {
+        it('if value is a string', () => {
+            $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="{ renderOn: \'foo\' }"></datetimepicker>')($rootScope);
+        });
+    });
+    describe('renderOn event', () => {
+        it('causes view to re-render after event is received', () => {
+            let selectable = true;
 
-      $rootScope.beforeRender = function (dates) {
-        dates[2].selectable = selectable
-      }
+            $rootScope.config = {
+                data: {
+                    startView: 'year',
+                    renderOn: 'valid-dates-changed'
+                }
+            };
 
-      spyOn($rootScope, 'beforeRender').and.callThrough()
+            $rootScope.beforeRender = (dates) => {
+                dates[2].selectable = selectable;
+            };
 
-      var element = $compile('<datetimepicker data-ng-model="date" data-before-render=\'beforeRender($dates)\' data-datetimepicker-config="config.data"></datetimepicker>')($rootScope)
-      $rootScope.$digest()
+            spyOn($rootScope, 'beforeRender').and.callThrough();
 
-      var selectedElement = jQuery(jQuery('.year', element)[2])
-      expect(selectedElement.hasClass('disabled')).toBeFalsy()
+            const element = $compile('<datetimepicker data-ng-model="date" data-before-render=\'beforeRender($dates)\' data-datetimepicker-config="config.data"></datetimepicker>')($rootScope);
+            $rootScope.$digest();
 
-      selectable = false
+            let selectedElement = jQuery(jQuery('.year', element)[2]);
+            expect(selectedElement.hasClass('disabled')).toBeFalsy();
 
-      $rootScope.$broadcast('valid-dates-changed')
-      $rootScope.$digest()
+            selectable = false;
 
-      expect($rootScope.beforeRender.calls.count()).toBe(2)
+            $rootScope.$broadcast('valid-dates-changed');
+            $rootScope.$digest();
 
-      selectedElement = jQuery(jQuery('.year', element)[2])
-      expect(selectedElement.hasClass('disabled')).toBeTruthy()
-    })
-  })
-})
+            expect($rootScope.beforeRender.calls.count()).toBe(2);
+
+            selectedElement = jQuery(jQuery('.year', element)[2]);
+            expect(selectedElement.hasClass('disabled')).toBeTruthy();
+        });
+    });
+});

@@ -1,5 +1,3 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, luxon, spyOn */
-
 /**
  * @license angularjs-bootstrap-datetimepicker
  * Copyright 2014 Knight Rider Consulting, Inc. http://www.knightrider.com
@@ -9,39 +7,42 @@
  * @since        11/15/2014
  */
 
-describe('dateimePickerConfig', function () {
-    'use strict';
-    var $rootScope;
-    var $compile;
+/* tslint:disable:variable-name */
+import {DateTime, Settings} from 'luxon';
+import * as jQuery from 'jquery';
+import dateTimePickerModule from './../../src/datetimepicker/datetimepicker.module';
+import angular = require('angular');
 
-    beforeEach(module('ui.bootstrap.datetimepicker'));
+describe('dateimePickerConfig', () => {
+    let $rootScope;
+    let $compile;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_) {
-        luxon.Settings.defaultLocale = 'en';
+    beforeEach(() => angular.mock.module(dateTimePickerModule));
+
+    beforeEach(inject((_$compile_, _$rootScope_) => {
+        Settings.defaultLocale = 'en';
         $compile = _$compile_;
-        $rootScope = _$rootScope_
+        $rootScope = _$rootScope_;
     }));
 
-    describe('retrieves information from', function () {
-        it('function on scope', function () {
-            var $scope = $rootScope.$new();
-            $scope.date = luxon.DateTime.fromISO('2014-11-15T00:00:00.000').toJSDate();
-            $scope.configFunction = function configFunction() {
-                return {startView: 'month'}
-            };
+    describe('retrieves information from', () => {
+        it('function on scope', () => {
+            const $scope = $rootScope.$new();
+            $scope.date = DateTime.fromISO('2014-11-15T00:00:00.000').toJSDate();
+            $scope.configFunction = () => ({startView: 'month'});
 
             spyOn($scope, 'configFunction').and.callThrough();
 
-            var element = $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="configFunction()" ></datetimepicker>')($scope);
+            const element = $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="configFunction()" ></datetimepicker>')($scope);
             $scope.$digest();
 
             expect(jQuery('.switch', element).text()).toBe('2014');
-            expect($scope.configFunction).toHaveBeenCalled()
+            expect($scope.configFunction).toHaveBeenCalled();
         });
 
-        it('property on scope', function () {
-            var $scope = $rootScope.$new();
-            $scope.date = luxon.DateTime.fromISO('2014-11-15T00:00:00.000').toJSDate();
+        it('property on scope', () => {
+            const $scope = $rootScope.$new();
+            $scope.date = DateTime.fromISO('2014-11-15T00:00:00.000').toJSDate();
             $scope.config = {
                 datetimePicker: {
                     startView: 'year'
@@ -50,10 +51,10 @@ describe('dateimePickerConfig', function () {
 
             spyOn($scope, 'config').and.callThrough();
 
-            var element = $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="config.datetimePicker" ></datetimepicker>')($scope);
+            const element = $compile('<datetimepicker data-ng-model="date" data-datetimepicker-config="config.datetimePicker" ></datetimepicker>')($scope);
             $scope.$digest();
 
-            expect(jQuery('.switch', element).text()).toBe('2010-2019')
-        })
-    })
+            expect(jQuery('.switch', element).text()).toBe('2010-2019');
+        });
+    });
 });

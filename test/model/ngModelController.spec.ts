@@ -1,5 +1,3 @@
-/* globals describe, beforeEach, it, expect, module, inject, jQuery, spyOn */
-
 /**
  * @license angularjs-bootstrap-datetimepicker
  * Copyright 2016 Knight Rider Consulting, Inc. http://www.knightrider.com
@@ -9,42 +7,46 @@
  * @since        7/21/13
  */
 
-describe('ngModelController', function () {
-  'use strict'
-  beforeEach(module('ui.bootstrap.datetimepicker'))
+/* tslint:disable:variable-name */
+import * as jQuery from 'jquery';
+import dateTimePickerModule from './../../src/datetimepicker/datetimepicker.module';
+import angular = require('angular');
 
-  describe('remove $pristine when date set', function () {
-    it('if value is not a string', inject(function ($compile, $rootScope) {
-      $rootScope.data = {}
+describe('ngModelController', () => {
+    beforeEach(() => angular.mock.module(dateTimePickerModule));
 
-      $rootScope.setTimeFunction = function setTimeFunction () {
-        // Nothing to validate here.
-        return undefined
-      }
+    describe('remove $pristine when date set', () => {
+        it('if value is not a string', inject(($compile, $rootScope) => {
+            $rootScope.data = {};
 
-      spyOn($rootScope, 'setTimeFunction')
+            $rootScope.setTimeFunction = () => {
+                // Nothing to validate here.
+                return undefined;
+            };
 
-      var formElement = $compile('<form name="pickerform"><datetimepicker data-ng-model="data.dateValue" name="dateValue" data-on-set-time="setTimeFunction(newDate)" required data-datetimepicker-config="{ startView: \'day\', minView: \'day\' }" ></datetimepicker></form>')($rootScope)
-      $rootScope.$digest()
+            spyOn($rootScope, 'setTimeFunction');
 
-      expect(formElement.hasClass('ng-pristine')).toBeTruthy()
+            const formElement = $compile('<form name="pickerform"><datetimepicker data-ng-model="data.dateValue" name="dateValue" data-on-set-time="setTimeFunction(newDate)" required data-datetimepicker-config="{ startView: \'day\', minView: \'day\' }" ></datetimepicker></form>')($rootScope);
+            $rootScope.$digest();
 
-      var picker = jQuery(jQuery('.datetimepicker', formElement))
-      expect(picker.hasClass('ng-invalid')).toBeTruthy()
-      expect(picker.hasClass('ng-dirty')).toBeFalsy()
-      expect(picker.hasClass('ng-valid')).toBeFalsy()
+            expect(formElement.hasClass('ng-pristine')).toBeTruthy();
 
-      jQuery(jQuery('.day', picker)[2]).trigger('click')
+            const picker = jQuery(jQuery('.datetimepicker', formElement));
+            expect(picker.hasClass('ng-invalid')).toBeTruthy();
+            expect(picker.hasClass('ng-dirty')).toBeFalsy();
+            expect(picker.hasClass('ng-valid')).toBeFalsy();
 
-      expect($rootScope.setTimeFunction).toHaveBeenCalled()
+            jQuery(jQuery('.day', picker)[2]).trigger('click');
 
-      expect(picker.hasClass('ng-invalid')).toBeFalsy()
-      expect(picker.hasClass('ng-pristine')).toBeFalsy()
-      expect(picker.hasClass('ng-dirty')).toBeTruthy()
-      expect(picker.hasClass('ng-valid')).toBeTruthy()
+            expect($rootScope.setTimeFunction).toHaveBeenCalled();
 
-      expect(formElement.hasClass('ng-pristine')).toBeFalsy()
-      expect(formElement.hasClass('ng-dirty')).toBeTruthy()
-    }))
-  })
-})
+            expect(picker.hasClass('ng-invalid')).toBeFalsy();
+            expect(picker.hasClass('ng-pristine')).toBeFalsy();
+            expect(picker.hasClass('ng-dirty')).toBeTruthy();
+            expect(picker.hasClass('ng-valid')).toBeTruthy();
+
+            expect(formElement.hasClass('ng-pristine')).toBeFalsy();
+            expect(formElement.hasClass('ng-dirty')).toBeTruthy();
+        }));
+    });
+});
