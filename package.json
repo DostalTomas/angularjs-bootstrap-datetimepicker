@@ -32,6 +32,7 @@
     "@kpsys/angularjs-register": "1.x"
   },
   "devDependencies": {
+    "jquery": "latest",
     "luxon": "latest",
     "@kpsys/angular-ui-bootstrap": "latest",
     "@babel/core": "latest",

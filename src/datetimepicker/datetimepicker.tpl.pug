@@ -6,8 +6,7 @@
 					i.glyphicon.glyphicon-arrow-left
 						span.sr-only {{ $ctrl.screenReader.previous }}
 
-				th.switch(colspan="5" ng-show="$ctrl.data.previousViewDate.selectable" ng-click="$ctrl.changeView($ctrl.data.previousView, $ctrl.data.previousViewDate, $event)")
-					| {{ $ctrl.data.previousViewDate.display }}
+				th.switch(colspan="5" ng-show="$ctrl.data.previousViewDate.selectable" ng-click="$ctrl.changeView($ctrl.data.previousView, $ctrl.data.previousViewDate, $event)") {{ $ctrl.data.previousViewDate.display }}
 
 				th.right(ng-show="$ctrl.data.rightDate.selectable" ng-click="$ctrl.changeView($ctrl.data.currentView, $ctrl.data.rightDate, $event)")
 					i.glyphicon.glyphicon-arrow-right
@@ -19,9 +18,7 @@
 		tbody
 			tr(ng-if="$ctrl.data.currentView !== 'day'")
 				td(colspan="7")
-					span(class="{{ $ctrl.data.currentView }}" ng-repeat="dateObject in $ctrl.data.dates" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)").
-						{{ dateObject.display }}
+					span(class="{{ $ctrl.data.currentView }}" ng-repeat="dateObject in $ctrl.data.dates" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)") {{ dateObject.display }}
 
 			tr(ng-if="$ctrl.data.currentView === 'day'" ng-repeat="week in $ctrl.data.weeks")
-				td.day(ng-repeat="dateObject in week.dates" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}")
-					| {{ dateObject.display }}
+				td.day(ng-repeat="dateObject in week.dates" ng-click="$ctrl.changeView($ctrl.data.nextView, dateObject, $event)" ng-class="{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}") {{ dateObject.display }}
