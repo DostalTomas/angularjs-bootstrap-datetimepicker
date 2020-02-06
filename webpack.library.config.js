@@ -1,6 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 
 module.exports = (env, {mode}) => ({
@@ -107,14 +107,10 @@ module.exports = (env, {mode}) => ({
             new MiniCssExtractPlugin({
                 filename: '[name].css'
             }),
-            new CleanWebpackPlugin(
-                ['dist/*.*'],
-                {
-                    root: path.resolve(__dirname),
-                    verbose: true,
-                    exclude: ['.gitkeep']
-                }
-            )];
+            new CleanWebpackPlugin({
+                verbose: true,
+                cleanStaleWebpackAssets: false
+            })];
         if (mode === 'production') {
             plugins.push(new UnminifiedWebpackPlugin());
         }
