@@ -9,7 +9,7 @@ html
 		main.container(ng-controller="demoController as dc")
 			.row
 				h2 Datetime picker
-				datetimepicker(ng-model="datetime1")
+				datetimepicker(ng-model="datetime1" datetimepicker-config="{minuteStep: 2}")
 				input.col-lg-3(disabled="true", ng-model="datetime1")
 			.row
 				h2 Datetime picker with ngChange

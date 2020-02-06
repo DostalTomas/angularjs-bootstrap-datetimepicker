@@ -21,11 +21,11 @@ export default class DateObject {
     public past?: boolean;
     public display?: string;
 
-    constructor({dateTime, ...rest}: { dateTime: DateTime, active?: boolean, current?: boolean, future?: boolean, past?: boolean, display?: string, selectable?: boolean }) {
+    constructor({dateTime, ...rest}: { dateTime: DateTime, active?: boolean, current?: boolean, future?: boolean, past?: boolean, display?: string, selectable?: boolean, narrow?: boolean }) {
         this.dateTime = dateTime;
         this.selectable = true;
 
-        const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable'];
+        const validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable', 'narrow'];
 
         Object.keys(rest)
             .filter((key) => validProperties.includes(key))

@@ -1,8 +1,12 @@
 export const YEAR_FORMAT = 'yyyy';
-export const MONTH_FORMAT = 'yyyy-LLL';
-export const DAY_FORMAT = 'yyyy-LLL-dd';
-export const HOUR_FORMAT = 'yyyy-LL-dd H';
-export const MINUTE_FORMAT = 'yyyy-LL-dd H:mm';
+export const MONTH_FORMAT = 'LLL';
+export const DAY_FORMAT = 'd';
+export const TIME_FORMAT = 'T';
+export const MINUTE_FORMAT = 'mm';
+export const FULL_MONTH_FORMAT = 'LLL yyyy';
+export const FULL_DAY_FORMAT = 'd LLL yyyy';
+export const FULL_HOUR_FORMAT = 'd LLL yyyy H\':00\'';
+export const FULL_MINUTE_FORMAT = 'd LLL yyyy H:mm';
 
 export interface DateTimeLocalization {
     [lang: string]: { next: string; previous: string };

@@ -4,9 +4,13 @@ import DateObject from './date-object';
 import {
     DateTimeLocalization,
     DAY_FORMAT,
-    HOUR_FORMAT,
+    FULL_DAY_FORMAT,
+    FULL_HOUR_FORMAT,
+    FULL_MINUTE_FORMAT,
+    FULL_MONTH_FORMAT,
     MINUTE_FORMAT,
     MONTH_FORMAT,
+    TIME_FORMAT,
     YEAR_FORMAT
 } from './datetimepicker.constants';
 import {IAttributes, INgModelController, IOnInit, IScope} from 'angular';
@@ -158,8 +162,8 @@ export abstract class DirectiveController implements IOnInit {
         const startDate = dateTime.startOf('year');
         const previousViewDate = this.startOfDecade(dateTime);
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), MONTH_FORMAT);
-        const currentFormat = this.getCurrentTimeFormatted(MONTH_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_MONTH_FORMAT);
+        const currentFormat = this.getCurrentTimeFormatted(FULL_MONTH_FORMAT);
 
         const result: DateTimeModel = {
             previousView: 'year',
@@ -167,7 +171,7 @@ export abstract class DirectiveController implements IOnInit {
             nextView: this.configuration.minView === 'month' ? 'setTime' : 'day',
             previousViewDate: new DateObject({
                 dateTime: previousViewDate,
-                display: startDate.toFormat('yyyy')
+                display: startDate.toFormat(YEAR_FORMAT)
             }),
             leftDate: new DateObject({dateTime: startDate.minus({years: 1})}),
             rightDate: new DateObject({dateTime: startDate.plus({years: 1})}),
@@ -177,9 +181,9 @@ export abstract class DirectiveController implements IOnInit {
         for (let i = 0; i < 12; i += 1) {
             const monthMoment = startDate.plus({months: i});
             const dateValue = {
-                active: monthMoment.toFormat(MONTH_FORMAT) === activeFormat,
-                current: monthMoment.toFormat(MONTH_FORMAT) === currentFormat,
-                display: monthMoment.toFormat('LLL'),
+                active: monthMoment.toFormat(FULL_MONTH_FORMAT) === activeFormat,
+                current: monthMoment.toFormat(FULL_MONTH_FORMAT) === currentFormat,
+                display: monthMoment.toFormat(MONTH_FORMAT),
                 dateTime: monthMoment
             };
 
@@ -198,8 +202,8 @@ export abstract class DirectiveController implements IOnInit {
 
         const startDate = startOfMonth.minus({days: Math.abs(startOfMonth.weekday)});
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), DAY_FORMAT);
-        const currentFormat = this.getCurrentTimeFormatted(DAY_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_DAY_FORMAT);
+        const currentFormat = this.getCurrentTimeFormatted(FULL_DAY_FORMAT);
 
         const result: DateTimeModel = {
             previousView: 'month',
@@ -207,7 +211,7 @@ export abstract class DirectiveController implements IOnInit {
             nextView: this.configuration.minView === 'day' ? 'setTime' : 'hour',
             previousViewDate: new DateObject({
                 dateTime: previousViewDate,
-                display: startOfMonth.toFormat('yyyy-LLL')
+                display: startOfMonth.toFormat(FULL_MONTH_FORMAT)
             }),
             leftDate: new DateObject({dateTime: startOfMonth.minus({months: 1})}),
             rightDate: new DateObject({dateTime: startOfMonth.plus({months: 1})}),
@@ -224,9 +228,9 @@ export abstract class DirectiveController implements IOnInit {
             for (let j = 1; j < 8; j++) {
                 const dayMoment = startDate.plus({days: (i * 7) + j});
                 const dateValue = {
-                    active: dayMoment.toFormat(DAY_FORMAT) === activeFormat,
-                    current: dayMoment.toFormat(DAY_FORMAT) === currentFormat,
-                    display: dayMoment.toFormat('d'),
+                    active: dayMoment.toFormat(FULL_DAY_FORMAT) === activeFormat,
+                    current: dayMoment.toFormat(FULL_DAY_FORMAT) === currentFormat,
+                    display: dayMoment.toFormat(DAY_FORMAT),
                     future: dayMoment > endOfMonth,
                     past: dayMoment < startOfMonth,
                     dateTime: dayMoment
@@ -243,8 +247,8 @@ export abstract class DirectiveController implements IOnInit {
         const selectedDate = dateTime.startOf('day');
         const previousViewDate = selectedDate.startOf('month');
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), HOUR_FORMAT);
-        const currentFormat = this.getCurrentTimeFormatted(HOUR_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_HOUR_FORMAT);
+        const currentFormat = this.getCurrentTimeFormatted(FULL_HOUR_FORMAT);
 
         const result: DateTimeModel = {
             previousView: 'day',
@@ -252,7 +256,7 @@ export abstract class DirectiveController implements IOnInit {
             nextView: this.configuration.minView === 'hour' ? 'setTime' : 'minute',
             previousViewDate: new DateObject({
                 dateTime: previousViewDate,
-                display: selectedDate.toFormat('DD')
+                display: selectedDate.toFormat(FULL_DAY_FORMAT)
             }),
             leftDate: new DateObject({dateTime: selectedDate.minus({days: 1})}),
             rightDate: new DateObject({dateTime: selectedDate.plus({days: 1})}),
@@ -262,9 +266,9 @@ export abstract class DirectiveController implements IOnInit {
         for (let i = 0; i < 24; i += 1) {
             const hourMoment = selectedDate.plus({hours: i});
             const dateValue = {
-                active: hourMoment.toFormat(HOUR_FORMAT) === activeFormat,
-                current: hourMoment.toFormat(HOUR_FORMAT) === currentFormat,
-                display: hourMoment.toFormat('t'),
+                active: hourMoment.toFormat(FULL_HOUR_FORMAT) === activeFormat,
+                current: hourMoment.toFormat(FULL_HOUR_FORMAT) === currentFormat,
+                display: hourMoment.toFormat(TIME_FORMAT),
                 dateTime: hourMoment
             };
 
@@ -278,8 +282,8 @@ export abstract class DirectiveController implements IOnInit {
         const selectedDate = dateTime.startOf('hour');
         const previousViewDate = selectedDate.startOf('day');
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), MINUTE_FORMAT);
-        const currentFormat = this.getCurrentTimeFormatted(MINUTE_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_MINUTE_FORMAT);
+        const currentFormat = this.getCurrentTimeFormatted(FULL_MINUTE_FORMAT);
 
         const result: DateTimeModel = {
             previousView: 'hour',
@@ -287,7 +291,7 @@ export abstract class DirectiveController implements IOnInit {
             nextView: 'setTime',
             previousViewDate: new DateObject({
                 dateTime: previousViewDate,
-                display: selectedDate.toFormat('ff')
+                display: selectedDate.toFormat(FULL_HOUR_FORMAT)
             }),
             leftDate: new DateObject({dateTime: selectedDate.minus({hours: 1})}),
             rightDate: new DateObject({dateTime: selectedDate.plus({hours: 1})}),
@@ -299,10 +303,11 @@ export abstract class DirectiveController implements IOnInit {
         for (let i = 0; i < limit; i += 1) {
             const hourMoment = selectedDate.plus({minute: i * this.configuration.minuteStep});
             const dateValue = {
-                active: hourMoment.toFormat(MINUTE_FORMAT) === activeFormat,
-                current: hourMoment.toFormat(MINUTE_FORMAT) === currentFormat,
-                display: hourMoment.toFormat('t'),
-                dateTime: hourMoment
+                active: hourMoment.toFormat(FULL_MINUTE_FORMAT) === activeFormat,
+                current: hourMoment.toFormat(FULL_MINUTE_FORMAT) === currentFormat,
+                display: hourMoment.toFormat(limit > 20 ? MINUTE_FORMAT : TIME_FORMAT),
+                dateTime: hourMoment,
+                narrow: limit > 20
             };
 
             result.dates.push(new DateObject(dateValue));

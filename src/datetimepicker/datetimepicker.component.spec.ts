@@ -1,9 +1,10 @@
 import dateTimePickerModule from './datetimepicker.module';
 import * as angular from 'angular';
 import {ICompileService, IDocumentService, IScope} from 'angular';
-import {DateTime, Settings} from 'luxon';
+import {DateTime, FixedOffsetZone, Settings} from 'luxon';
 
 Settings.defaultLocale = DateTime.local().resolvedLocaleOpts().locale;
+Settings.defaultZoneName = FixedOffsetZone.utcInstance;
 
 interface Scope extends IScope {
     model: string;
@@ -32,7 +33,7 @@ describe('date time picker', () => {
         const element = angular.element($document[0].body).append(angular.element(template));
         $compile(element)($scope);
 
-        $scope.model = '2022-02-22T22:22:22.000+01:00';
+        $scope.model = '2022-02-22T22:22:22.000Z';
 
         $scope.$apply();
 
@@ -45,7 +46,7 @@ describe('date time picker', () => {
         tdElement = angular.element($document[0].querySelector('.minute-view tbody tr span:nth-of-type(1)'));
         tdElement.triggerHandler('click');
 
-        expect($scope.model).toBe('2022-02-07T01:00:00.000+01:00');
+        expect($scope.model).toBe('2022-02-07T01:00:00.000Z');
     });
 
 });
