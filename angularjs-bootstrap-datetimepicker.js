@@ -111,10 +111,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.YEAR_FORMAT = 'yyyy';
-exports.MONTH_FORMAT = 'yyyy-LLL';
-exports.DAY_FORMAT = 'yyyy-LLL-dd';
-exports.HOUR_FORMAT = 'yyyy-LL-dd H';
-exports.MINUTE_FORMAT = 'yyyy-LL-dd H:mm';
+exports.MONTH_FORMAT = 'LLL';
+exports.DAY_FORMAT = 'd';
+exports.TIME_FORMAT = 'T';
+exports.MINUTE_FORMAT = 'mm';
+exports.FULL_MONTH_FORMAT = 'LLL yyyy';
+exports.FULL_DAY_FORMAT = 'd LLL yyyy';
+exports.FULL_HOUR_FORMAT = 'd LLL yyyy H\':00\'';
+exports.FULL_MINUTE_FORMAT = 'd LLL yyyy H:mm';
 exports.DEFAULT_LOCALIZATION = {
   'bg': {
     previous: 'предишна',
@@ -411,8 +415,8 @@ function () {
   return DateTimePickerValidatorService;
 }();
 
-DateTimePickerValidatorService.serviceName = 'dateTimePickerValidator';
 exports.default = DateTimePickerValidatorService;
+DateTimePickerValidatorService.serviceName = 'dateTimePickerValidator';
 
 /***/ }),
 /* 9 */
@@ -615,15 +619,15 @@ function () {
     value: function monthModelFactory(dateTime) {
       var startDate = dateTime.startOf('year');
       var previousViewDate = this.startOfDecade(dateTime);
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.MONTH_FORMAT);
-      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.MONTH_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_MONTH_FORMAT);
+      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_MONTH_FORMAT);
       var result = {
         previousView: 'year',
         currentView: 'month',
         nextView: this.configuration.minView === 'month' ? 'setTime' : 'day',
         previousViewDate: new date_object_1.default({
           dateTime: previousViewDate,
-          display: startDate.toFormat('yyyy')
+          display: startDate.toFormat(datetimepicker_constants_1.YEAR_FORMAT)
         }),
         leftDate: new date_object_1.default({
           dateTime: startDate.minus({
@@ -643,9 +647,9 @@ function () {
           months: i
         });
         var dateValue = {
-          active: monthMoment.toFormat(datetimepicker_constants_1.MONTH_FORMAT) === activeFormat,
-          current: monthMoment.toFormat(datetimepicker_constants_1.MONTH_FORMAT) === currentFormat,
-          display: monthMoment.toFormat('LLL'),
+          active: monthMoment.toFormat(datetimepicker_constants_1.FULL_MONTH_FORMAT) === activeFormat,
+          current: monthMoment.toFormat(datetimepicker_constants_1.FULL_MONTH_FORMAT) === currentFormat,
+          display: monthMoment.toFormat(datetimepicker_constants_1.MONTH_FORMAT),
           dateTime: monthMoment
         };
         result.dates.push(new date_object_1.default(dateValue));
@@ -663,15 +667,15 @@ function () {
       var startDate = startOfMonth.minus({
         days: Math.abs(startOfMonth.weekday)
       });
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.DAY_FORMAT);
-      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.DAY_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_DAY_FORMAT);
+      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_DAY_FORMAT);
       var result = {
         previousView: 'month',
         currentView: 'day',
         nextView: this.configuration.minView === 'day' ? 'setTime' : 'hour',
         previousViewDate: new date_object_1.default({
           dateTime: previousViewDate,
-          display: startOfMonth.toFormat('yyyy-LLL')
+          display: startOfMonth.toFormat(datetimepicker_constants_1.FULL_MONTH_FORMAT)
         }),
         leftDate: new date_object_1.default({
           dateTime: startOfMonth.minus({
@@ -701,9 +705,9 @@ function () {
             days: i * 7 + j
           });
           var dateValue = {
-            active: dayMoment.toFormat(datetimepicker_constants_1.DAY_FORMAT) === activeFormat,
-            current: dayMoment.toFormat(datetimepicker_constants_1.DAY_FORMAT) === currentFormat,
-            display: dayMoment.toFormat('d'),
+            active: dayMoment.toFormat(datetimepicker_constants_1.FULL_DAY_FORMAT) === activeFormat,
+            current: dayMoment.toFormat(datetimepicker_constants_1.FULL_DAY_FORMAT) === currentFormat,
+            display: dayMoment.toFormat(datetimepicker_constants_1.DAY_FORMAT),
             future: dayMoment > endOfMonth,
             past: dayMoment < startOfMonth,
             dateTime: dayMoment
@@ -721,15 +725,15 @@ function () {
     value: function hourModelFactory(dateTime) {
       var selectedDate = dateTime.startOf('day');
       var previousViewDate = selectedDate.startOf('month');
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.HOUR_FORMAT);
-      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.HOUR_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_HOUR_FORMAT);
+      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_HOUR_FORMAT);
       var result = {
         previousView: 'day',
         currentView: 'hour',
         nextView: this.configuration.minView === 'hour' ? 'setTime' : 'minute',
         previousViewDate: new date_object_1.default({
           dateTime: previousViewDate,
-          display: selectedDate.toFormat('DD')
+          display: selectedDate.toFormat(datetimepicker_constants_1.FULL_DAY_FORMAT)
         }),
         leftDate: new date_object_1.default({
           dateTime: selectedDate.minus({
@@ -749,9 +753,9 @@ function () {
           hours: i
         });
         var dateValue = {
-          active: hourMoment.toFormat(datetimepicker_constants_1.HOUR_FORMAT) === activeFormat,
-          current: hourMoment.toFormat(datetimepicker_constants_1.HOUR_FORMAT) === currentFormat,
-          display: hourMoment.toFormat('t'),
+          active: hourMoment.toFormat(datetimepicker_constants_1.FULL_HOUR_FORMAT) === activeFormat,
+          current: hourMoment.toFormat(datetimepicker_constants_1.FULL_HOUR_FORMAT) === currentFormat,
+          display: hourMoment.toFormat(datetimepicker_constants_1.TIME_FORMAT),
           dateTime: hourMoment
         };
         result.dates.push(new date_object_1.default(dateValue));
@@ -764,15 +768,15 @@ function () {
     value: function minuteModelFactory(dateTime) {
       var selectedDate = dateTime.startOf('hour');
       var previousViewDate = selectedDate.startOf('day');
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.MINUTE_FORMAT);
-      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.MINUTE_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_MINUTE_FORMAT);
+      var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_MINUTE_FORMAT);
       var result = {
         previousView: 'hour',
         currentView: 'minute',
         nextView: 'setTime',
         previousViewDate: new date_object_1.default({
           dateTime: previousViewDate,
-          display: selectedDate.toFormat('ff')
+          display: selectedDate.toFormat(datetimepicker_constants_1.FULL_HOUR_FORMAT)
         }),
         leftDate: new date_object_1.default({
           dateTime: selectedDate.minus({
@@ -793,10 +797,11 @@ function () {
           minute: i * this.configuration.minuteStep
         });
         var dateValue = {
-          active: hourMoment.toFormat(datetimepicker_constants_1.MINUTE_FORMAT) === activeFormat,
-          current: hourMoment.toFormat(datetimepicker_constants_1.MINUTE_FORMAT) === currentFormat,
-          display: hourMoment.toFormat('t'),
-          dateTime: hourMoment
+          active: hourMoment.toFormat(datetimepicker_constants_1.FULL_MINUTE_FORMAT) === activeFormat,
+          current: hourMoment.toFormat(datetimepicker_constants_1.FULL_MINUTE_FORMAT) === currentFormat,
+          display: hourMoment.toFormat(limit > 20 ? datetimepicker_constants_1.MINUTE_FORMAT : datetimepicker_constants_1.TIME_FORMAT),
+          dateTime: hourMoment,
+          narrow: limit > 20
         };
         result.dates.push(new date_object_1.default(dateValue));
       }
@@ -989,8 +994,8 @@ var DateTimePickerComponent = function DateTimePickerComponent() {
   };
 };
 
-DateTimePickerComponent.componentName = 'datetimepicker';
 exports.default = DateTimePickerComponent;
+DateTimePickerComponent.componentName = 'datetimepicker';
 
 /***/ }),
 /* 10 */
@@ -999,24 +1004,15 @@ exports.default = DateTimePickerComponent;
 "use strict";
 
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var __rest = this && this.__rest || function (s, e) {
-  var t = {};
-
-  for (var p in s) {
-    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-  }
-
-  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-    if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
-  }
-  return t;
-};
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -1037,17 +1033,17 @@ Object.defineProperty(exports, "__esModule", {
 var DateObject =
 /*#__PURE__*/
 function () {
-  function DateObject(_a) {
+  function DateObject(_ref) {
     var _this = this;
+
+    var dateTime = _ref.dateTime,
+        rest = _objectWithoutProperties(_ref, ["dateTime"]);
 
     _classCallCheck(this, DateObject);
 
-    var dateTime = _a.dateTime,
-        rest = __rest(_a, ["dateTime"]);
-
     this.dateTime = dateTime;
     this.selectable = true;
-    var validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable'];
+    var validProperties = ['active', 'current', 'display', 'future', 'past', 'selectable', 'narrow'];
     Object.keys(rest).filter(function (key) {
       return validProperties.includes(key);
     }).forEach(function (key) {
@@ -1072,7 +1068,7 @@ exports.default = DateObject;
 /***/ (function(module, exports) {
 
 var path = '/datetimepicker/datetimepicker.tpl.pug';
-var html = "<div class=\"datetimepicker table-responsive\"><table class=\"table table-condensed {{ $ctrl.data.currentView }}-view\"><thead><tr><th class=\"left\" ng-show=\"$ctrl.data.leftDate.selectable\" ng-click=\"$ctrl.changeView($ctrl.data.currentView, $ctrl.data.leftDate, $event)\"><i class=\"glyphicon glyphicon-arrow-left\"><span class=\"sr-only\">{{ $ctrl.screenReader.previous }}</span></i></th><th class=\"switch\" colspan=\"5\" ng-show=\"$ctrl.data.previousViewDate.selectable\" ng-click=\"$ctrl.changeView($ctrl.data.previousView, $ctrl.data.previousViewDate, $event)\">{{ $ctrl.data.previousViewDate.display }}</th><th class=\"right\" ng-show=\"$ctrl.data.rightDate.selectable\" ng-click=\"$ctrl.changeView($ctrl.data.currentView, $ctrl.data.rightDate, $event)\"><i class=\"glyphicon glyphicon-arrow-right\"><span class=\"sr-only\">{{ $ctrl.screenReader.next }}</span></i></th></tr><tr><th class=\"dow\" ng-repeat=\"day in $ctrl.data.dayNames\">{{ day }}</th></tr></thead><tbody><tr ng-if=\"$ctrl.data.currentView !== 'day'\"><td colspan=\"7\"><span class=\"{{ $ctrl.data.currentView }}\" ng-repeat=\"dateObject in $ctrl.data.dates\" ng-class=\"{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}\" ng-click=\"$ctrl.changeView($ctrl.data.nextView, dateObject, $event)\">{{ dateObject.display }}\n</span></td></tr><tr ng-if=\"$ctrl.data.currentView === 'day'\" ng-repeat=\"week in $ctrl.data.weeks\"><td class=\"day\" ng-repeat=\"dateObject in week.dates\" ng-click=\"$ctrl.changeView($ctrl.data.nextView, dateObject, $event)\" ng-class=\"{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}\">{{ dateObject.display }}</td></tr></tbody></table></div>";
+var html = "<div class=\"datetimepicker table-responsive\"><table class=\"table table-condensed {{ $ctrl.data.currentView }}-view\"><thead><tr><th class=\"left\" ng-show=\"$ctrl.data.leftDate.selectable\" ng-click=\"$ctrl.changeView($ctrl.data.currentView, $ctrl.data.leftDate, $event)\"><i class=\"glyphicon glyphicon-arrow-left\"><span class=\"sr-only\">{{ $ctrl.screenReader.previous }}</span></i></th><th class=\"switch\" colspan=\"5\" ng-show=\"$ctrl.data.previousViewDate.selectable\" ng-click=\"$ctrl.changeView($ctrl.data.previousView, $ctrl.data.previousViewDate, $event)\">{{ $ctrl.data.previousViewDate.display }}</th><th class=\"right\" ng-show=\"$ctrl.data.rightDate.selectable\" ng-click=\"$ctrl.changeView($ctrl.data.currentView, $ctrl.data.rightDate, $event)\"><i class=\"glyphicon glyphicon-arrow-right\"><span class=\"sr-only\">{{ $ctrl.screenReader.next }}</span></i></th></tr><tr><th class=\"dow\" ng-repeat=\"day in $ctrl.data.dayNames\">{{ day }}</th></tr></thead><tbody><tr ng-if=\"$ctrl.data.currentView !== 'day'\"><td colspan=\"7\"><span class=\"{{ $ctrl.data.currentView }}\" ng-repeat=\"dateObject in $ctrl.data.dates\" ng-class=\"{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable, narrow: dateObject.narrow}\" ng-click=\"$ctrl.changeView($ctrl.data.nextView, dateObject, $event)\">{{ dateObject.display }}</span></td></tr><tr ng-if=\"$ctrl.data.currentView === 'day'\" ng-repeat=\"week in $ctrl.data.weeks\"><td class=\"day\" ng-repeat=\"dateObject in week.dates\" ng-click=\"$ctrl.changeView($ctrl.data.nextView, dateObject, $event)\" ng-class=\"{current: dateObject.current, active: dateObject.active, past: dateObject.past, future: dateObject.future, disabled: !dateObject.selectable}\">{{ dateObject.display }}</td></tr></tbody></table></div>";
 window.angular.module('ng').run(['$templateCache', function(c) { c.put(path, html) }]);
 module.exports = path;
 

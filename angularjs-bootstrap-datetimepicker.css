@@ -16,6 +16,10 @@
   margin: 0;
   width: 25%;
 }
+.datetimepicker .hour.narrow,
+.datetimepicker .minute.narrow {
+  width: 10%;
+}
 .datetimepicker .table {
   margin: 0;
 }

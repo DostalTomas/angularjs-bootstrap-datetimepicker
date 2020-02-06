@@ -29,7 +29,7 @@
      *
      * @throws {Error} Error if configuration is invalid
      */
-/* Order of the elements in the validViews array is significant.*//*@ngInject*/
+/* Order of the elements in the validViews array is significant.*//* tslint:disable-next-line:variable-name*//*@ngInject*/
 /* Behavior*/
 /* Implementation*/
 /* @ts-ignore*/
