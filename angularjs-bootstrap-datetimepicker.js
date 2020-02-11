@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["angular", "luxon", "@kpsys/angularjs-register"], factory);
 	else if(typeof exports === 'object')
-		exports["angularjs-bootstrap-datetimepicker"] = factory(require("angular"), require("luxon"), require("@kpsys/angularjs-register"));
+		exports["@kpsys/angularjs-bootstrap-datetimepicker"] = factory(require("angular"), require("luxon"), require("@kpsys/angularjs-register"));
 	else
-		root["angularjs-bootstrap-datetimepicker"] = factory(root["angular"], root["luxon"], root["@kpsys/angularjs-register"]);
+		root["@kpsys/angularjs-bootstrap-datetimepicker"] = factory(root["angular"], root["luxon"], root["@kpsys/angularjs-register"]);
 })(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__6__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
