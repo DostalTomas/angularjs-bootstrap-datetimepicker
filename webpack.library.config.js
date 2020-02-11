@@ -1,4 +1,5 @@
 const path = require('path');
+const pkg = require('./package.json');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
@@ -15,7 +16,7 @@ module.exports = (env, {mode}) => ({
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
-        library: 'angularjs-bootstrap-datetimepicker',
+        library: pkg.name,
         libraryTarget: 'umd'
     },
 
