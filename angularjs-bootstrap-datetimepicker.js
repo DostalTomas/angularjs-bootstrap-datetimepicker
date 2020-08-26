@@ -575,7 +575,7 @@ function () {
       var startDate = this.startOfDecade(dateTime).minus({
         years: 1
       }).startOf('year');
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.YEAR_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), datetimepicker_constants_1.YEAR_FORMAT);
       var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.YEAR_FORMAT);
       var result = {
         currentView: 'year',
@@ -619,7 +619,7 @@ function () {
     value: function monthModelFactory(dateTime) {
       var startDate = dateTime.startOf('year');
       var previousViewDate = this.startOfDecade(dateTime);
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_MONTH_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), datetimepicker_constants_1.FULL_MONTH_FORMAT);
       var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_MONTH_FORMAT);
       var result = {
         previousView: 'year',
@@ -667,7 +667,7 @@ function () {
       var startDate = startOfMonth.minus({
         days: Math.abs(startOfMonth.weekday)
       });
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_DAY_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), datetimepicker_constants_1.FULL_DAY_FORMAT);
       var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_DAY_FORMAT);
       var result = {
         previousView: 'month',
@@ -725,7 +725,7 @@ function () {
     value: function hourModelFactory(dateTime) {
       var selectedDate = dateTime.startOf('day');
       var previousViewDate = selectedDate.startOf('month');
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_HOUR_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), datetimepicker_constants_1.FULL_HOUR_FORMAT);
       var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_HOUR_FORMAT);
       var result = {
         previousView: 'day',
@@ -768,7 +768,7 @@ function () {
     value: function minuteModelFactory(dateTime) {
       var selectedDate = dateTime.startOf('hour');
       var previousViewDate = selectedDate.startOf('day');
-      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), datetimepicker_constants_1.FULL_MINUTE_FORMAT);
+      var activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), datetimepicker_constants_1.FULL_MINUTE_FORMAT);
       var currentFormat = this.getCurrentTimeFormatted(datetimepicker_constants_1.FULL_MINUTE_FORMAT);
       var result = {
         previousView: 'hour',
@@ -811,7 +811,7 @@ function () {
   }, {
     key: "setTime",
     value: function setTime(dateTime) {
-      var oldDate = this.ngModelController.$modelValue;
+      var oldDate = this.ngModelController.$viewValue;
 
       if (this.viewFormat) {
         this.ngModelController.$setViewValue(dateTime.toFormat(this.viewFormat));
@@ -834,7 +834,7 @@ function () {
     key: "$render",
     value: function $render() {
       this.changeView(this.configuration.startView, new date_object_1.default({
-        dateTime: this.toDateTime(this.ngModelController.$modelValue)
+        dateTime: this.toDateTime(this.ngModelController.$viewValue)
       }));
     }
   }, {

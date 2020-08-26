@@ -129,4 +129,6 @@
  * @description
  * Native AngularJS date & time picker directive styled by Twitter Bootstrap. Based on [dalelotts/angularjs-bootstrap-datetimepicker](https://github.com/dalelotts/angularjs-bootstrap-datetimepicker).
  * Rewritten into TS with webpack bundler and Luxon.
- */
+ *//* current view type has higher granularity, e.g. I want day, but it's in year mode.*/
+/* current view type has lower granularity, e.g. I want year, but it's in day mode.*/
+/* tslint:disable-next-line:no-console*/
