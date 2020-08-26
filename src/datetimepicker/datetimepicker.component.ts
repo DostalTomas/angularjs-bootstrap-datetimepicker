@@ -126,7 +126,7 @@ export abstract class DirectiveController implements IOnInit {
         const startDecade = parseInt(selectedDate.year / 10, 10) * 10;
         const startDate = this.startOfDecade(dateTime).minus({years: 1}).startOf('year');
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), YEAR_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), YEAR_FORMAT);
         const currentFormat = this.getCurrentTimeFormatted(YEAR_FORMAT);
 
         const result: DateTimeModel = {
@@ -162,7 +162,7 @@ export abstract class DirectiveController implements IOnInit {
         const startDate = dateTime.startOf('year');
         const previousViewDate = this.startOfDecade(dateTime);
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_MONTH_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), FULL_MONTH_FORMAT);
         const currentFormat = this.getCurrentTimeFormatted(FULL_MONTH_FORMAT);
 
         const result: DateTimeModel = {
@@ -202,7 +202,7 @@ export abstract class DirectiveController implements IOnInit {
 
         const startDate = startOfMonth.minus({days: Math.abs(startOfMonth.weekday)});
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_DAY_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), FULL_DAY_FORMAT);
         const currentFormat = this.getCurrentTimeFormatted(FULL_DAY_FORMAT);
 
         const result: DateTimeModel = {
@@ -247,7 +247,7 @@ export abstract class DirectiveController implements IOnInit {
         const selectedDate = dateTime.startOf('day');
         const previousViewDate = selectedDate.startOf('month');
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_HOUR_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), FULL_HOUR_FORMAT);
         const currentFormat = this.getCurrentTimeFormatted(FULL_HOUR_FORMAT);
 
         const result: DateTimeModel = {
@@ -282,7 +282,7 @@ export abstract class DirectiveController implements IOnInit {
         const selectedDate = dateTime.startOf('hour');
         const previousViewDate = selectedDate.startOf('day');
 
-        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$modelValue), FULL_MINUTE_FORMAT);
+        const activeFormat = this.formatValue(this.toDateTime(this.ngModelController.$viewValue), FULL_MINUTE_FORMAT);
         const currentFormat = this.getCurrentTimeFormatted(FULL_MINUTE_FORMAT);
 
         const result: DateTimeModel = {
@@ -317,7 +317,7 @@ export abstract class DirectiveController implements IOnInit {
     }
 
     public setTime(dateTime: DateTime): DateTimeModel {
-        const oldDate = this.ngModelController.$modelValue;
+        const oldDate = this.ngModelController.$viewValue;
         if (this.viewFormat) {
             this.ngModelController.$setViewValue(dateTime.toFormat(this.viewFormat));
         } else {
@@ -333,7 +333,7 @@ export abstract class DirectiveController implements IOnInit {
     }
 
     private $render() {
-        this.changeView(this.configuration.startView, new DateObject({dateTime: this.toDateTime(this.ngModelController.$modelValue)}));
+        this.changeView(this.configuration.startView, new DateObject({dateTime: this.toDateTime(this.ngModelController.$viewValue)}));
     }
 
     private startOfDecade(dateTime: DateTime): DateTime {

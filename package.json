@@ -1,6 +1,6 @@
 {
   "name": "@kpsys/angularjs-bootstrap-datetimepicker",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "This directive allows you to add a datetime-picker to your form elements. Based on https://github.com/dalelotts/angularjs-bootstrap-datetimepicker",
   "author": {
     "email": "tomas.dostal@kpsys.cz",
